@@ -175,3 +175,6 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+publish:
+	scp -r build/html a0600760@sip1.mu.renesas.com:/home/a0600760/public_html/msmg/
