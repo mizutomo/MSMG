@@ -3,13 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Mixed-Signal Methodogology Guide's documentation!
+Welcome to Mixed-Signal Methodology Guide's documentation!
 ==============================================================
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+  :maxdepth: 2
+
+  Ch3_AMS_Behavioral_Modeling
 
 
 
