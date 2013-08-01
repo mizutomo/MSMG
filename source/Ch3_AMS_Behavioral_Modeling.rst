@@ -130,3 +130,12 @@ Combined Approaches
     * ベースバンド, バイアス、パワー供給: Electrical
     * 制御回路: ロジック
 
+
+Basic Moeling Formats
+====================================
+
+
+Model Operational Description
+-----------------------------------
+
+*
