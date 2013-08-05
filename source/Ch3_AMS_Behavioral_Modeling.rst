@@ -148,12 +148,12 @@ Model Operational Description
 * 出力端子の出力抵抗はRoutとする。
 
  .. csv-table:: List of terminals
-    :header: "pinName","expression" 
+    :header: "pinName","expression"
     :widths: 20,70
 
-    "INP,INM","差動入力 V(INP,INM)" 
+    "INP,INM","差動入力 V(INP,INM)"
     "OUTP,OUTN","差動出力 V(OUTP,OUTN)"
-    "GAIN[2:0]","ゲイン制御端子( dbmin@GAIN=000, dbmax@GAIN=111 )" 
+    "GAIN[2:0]","ゲイン制御端子( dbmin@GAIN=000, dbmax@GAIN=111 )"
     "VDD,VSS","電源"
     "VB","バイアス入力"
     "EN","Enable信号( ハイインピーダンス@EN=0, 通常出力@EN=1 )"
@@ -162,60 +162,17 @@ Model Operational Description
 AMS Programmable-Gain Amplifier Model
 ---------------------------------------------------
 
-* `pga_verilogams <../txt/pga_verilogams.txt>`_
+  * pga_verilogams
 
-::
-
-  `include "disciplines.vams"  
-  modele PGA (OUTP,OUTN, INP,INN, GAIN, VB, VDD,VSS, EN);  
-  output OUTP,OUTN;		// differential output 
-  input  INP,INN;    		// differential input
-  input [2:0] GAIN;   		// digital control bus
-  input VDD,VSS,VB;    		// power supplies & bias voltage input
-  input EN; 			// output enable
-  electrical OUTP,OUTN, INP,INN, VB, VDD,VSS; 
-  logic EN;  logic [2:0] GAIN; 
- 
-  parameter real dbmin=-1;	// gain for VCVGA=000
-  parameter real dbmax=20;	// gain for VCVGA=111
-  parameter real Rout=100;	// output resistance for each pin
-  parameter real Tr=10n;	// rise/fall time for gain & enable changes
-  real DBinc, Adb, Av;		// terms in gain calculation
-  real Voctr,Vomax,Vodif;	// terms in output calculation
-  real Gout;			// output conductance (smoothly switched)
-  integer Active;		// flag for active operation
- 
-  initial DBinc=(dbmax-dbmin)/7;	// compute per-bit change to db gain
-  always begin
-    if( (^GAIN)===1'bx ) Adb=-40;	// low gain if invalid control input
-    else Adb=dbmin+DBinc*GAIN;		// compute gain in dB
-    @(GAIN);				// recompute on gain bus change
-  end
- 
-  analog begin
-  // Check device is active (EN high, supply & bias correct):
-    Active = (EN===1'b1) && V(VDD,VSS)>=2.0 && abs(V(VB,VSS)-0.7)<=0.05;
-    Av = transition(Active? pow(10,Adb/20.0):1u, 0, Tr);  		// convert to V/V
-    Voctr = transition(Active,0,Tr)*V(VDD,VSS)/2;			// CM output level wrt Vss
-    Vomax = max(V(VDD,VSS),0.001);					// max swing of output
-    Vodif = Vomax*tanh(Av*V(INP,INN)/Vomax);				// gain & saturation limiting
- 
-  // Driver output pins with differential Gain*input at Rout if active,
-  // high impedance if disabled, or high attenuation on bias error:
-    Gout = transition( (EN===1'b1)? 1/Rout:1n, 0,Tr);
- 
-    I(OUTP,VSS) <+ (V(OUTP,VSS) - (Voctr+Vodif/2)) * Gout;
-    I(OUTN,VSS) <+ (V(OUTN,VSS) - (Voctr+Vodif/2)) * Gout;
- 
-  end
-  endmodule
-
+  .. literalinclude:: ./txt/pga_verilogams.txt
+    :linenos:
+    :language: verilog
 
 
 端子の属性定義
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    * deciplines.vamsを定義(/common/appl/Cadence/mmsim/12.1_isr2/linux/tools.lnx86/spectre/etc/ahdl/deciplines.vams)
+    * deciplines.vamsを定義 (/common/appl/Cadence/mmsim/12.1_isr2/linux/tools.lnx86/spectre/etc/ahdl/deciplines.vams)
     * アナログ信号(入出力、電源、バイアス入力)は、electricalで定義。analogブロック内で使われI(),V()を使用して測定。アナログソルバで解かれる。
     * デジタル信号(GAIN,EN)は、logicで定義。デジタルブロック内で使われ、1,0,X,Zの値を持つ。デジタルソルバで解かれる。
 
@@ -260,8 +217,8 @@ AMS Programmable-Gain Amplifier Model
     * | Vomaxは、出力のpeak-to-peakの最大出力のため電源電圧で定義。ただし、電源電圧が供給されていない場合には、0.001[V]とする。
     * | Vodifは、差動出力の信号成分。
       | 入力差動信号をゲイン倍したものになるが、AMPの動作電圧で飽和する。
-      | min/maxで簡単に定義する事も出来るが、実回路特性に近づけるためtanh(ハイパーボリックタンジェント)関数を使用して緩やかにリミットがかかるようにした。 
- 
+      | min/maxで簡単に定義する事も出来るが、実回路特性に近づけるためtanh(ハイパーボリックタンジェント)関数を使用して緩やかにリミットがかかるようにした。
+
     .. image::  ./img/vodif.png
        :alt: Inputとoutputの関係
 
@@ -275,58 +232,13 @@ AMS Programmable-Gain Amplifier Model
 Analog PGA Model
 -----------------------------------------
 
-  * `pga_veriloga <../txt/pga_veriloga.txt>`_
+  * pga_veriloga
 
-::
-
-  `include "disciplines.vams"
-  module PGA ( OUTP,OUTN, INP,INN, GAIN, VB, VDD,VSS, EN );
-  output OUTP,OUTN;             // differential output
-  input  INP,INN;               // differential input
-  input [2:0] GAIN;             // digital control bus
-  input VDD,VSS,VB;             // power supplies & bias voltage input
-  input EN;                     // output enable
-  electrical OUTP,OUTN, INP,INN, VB, VDD,VSS, EN;
-  electrical [2:0] GAIN;
-
-  parameter real dbmin=-1;      // gain for VCVGA=000
-  parameter real dbmax=20;      // gain for VCVGA=111
-  parameter real Rout=100;      // output resistance for each pin
-  parameter real Tr=10n;        // rise/fall time for gain & enable changes
-  real DBinc, Adb, Av;          // terms in gain calculation
-  real Voctr,Vomax,Vodif;       // terms in output calculation
-  real Gout;                    // output conductance (smoothly switched)
-  integer Active;               // flag for active operation
-
-  // Macro to convert pin coltage to logic level of 1 or 0 based on half supply:
-  `define L(pin) (V(pin,VSS)>V(VDD,VSS)/2)
-  
-  analog begin
-  // Check when enabled & biased properly:
-    Avtive = `L(EN)==1 && V(VDD,VSS)>=2.0 && abs(V(VB,VSS)-0.7)<=0.05;
-
-  // Gain calculation:
-    @(initial_step) DBinc = (dbmax-dbmin)/7;		// compute per-bit increment
-    Gint = `L(GAIN[2])*4 + `L(GAIN[1])*2 + `L(GAIN[0]);	// get integer form of GAIN
-    Adb = dbmin + DBinc*Gint;				// convert to gain in dB
-    Av = transition( Active? pow(10,Adb/20.0):1u, 0,Tr);	// to V/V or small if off
-
-  // Output signal evaluation:
-    Voctr = transition(Active,0,Tr)*V(VDD,VSS)/2;                       // CM output level wrt Vss
-    Vomax = max(V(VDD,VSS),0.001);                                      // max swing of output
-    Vodif = Vomax*tanh(Av*V(INP,INN)/Vomax);                            // gain & saturation limiting
-
-  // Driver output pins with differential Gain*input at Rout if active,
-  // high impedance if disabled, or high attenuation on bias error:
-    Gout = transition( `L(EN)? 1/Rout:1n, 0,Tr);
-
-    I(OUTP,VSS) <+ (V(OUTP,VSS) - (Voctr+Vodif/2)) * Gout;
-    I(OUTN,VSS) <+ (V(OUTN,VSS) - (Voctr+Vodif/2)) * Gout;
-
-  end
-  endmodule
+  .. literalinclude:: ./txt/pga_veriloga.txt
+    :linenos:
+    :language: verilog
 
 
 * アナログモデルは、デジタルソルバが無い場合、又は全PINがアナログ端子として定義されている場合に使用され、VerilogAで記述される。
-* 
+
 
