@@ -1,0 +1,47 @@
+`include "disciplines.vams"
+
+module PGA ( OUTP,OUTN, INP,INN, GAIN, VB, VDD,VSS, EN );
+output OUTP,OUTN;             // differential output
+input  INP,INN;               // differential input
+input [2:0] GAIN;             // digital control bus
+input VDD,VSS,VB;             // power supplies & bias voltage input
+input EN;                     // output enable
+electrical OUTP,OUTN, INP,INN, VB, VDD,VSS, EN;
+electrical [2:0] GAIN;
+
+parameter real dbmin=-1;      // gain for VCVGA=000
+parameter real dbmax=20;      // gain for VCVGA=111
+parameter real Rout=100;      // output resistance for each pin
+parameter real Tr=10n;        // rise/fall time for gain & enable changes
+real DBinc, Adb, Av;          // terms in gain calculation
+real Voctr,Vomax,Vodif;       // terms in output calculation
+real Gout;                    // output conductance (smoothly switched)
+integer Active;               // flag for active operation
+
+// Macro to convert pin coltage to logic level of 1 or 0 based on half supply:
+`define L(pin) (V(pin,VSS)>V(VDD,VSS)/2)
+
+analog begin
+// Check when enabled & biased properly:
+  Avtive = `L(EN)==1 && V(VDD,VSS)>=2.0 && abs(V(VB,VSS)-0.7)<=0.05;
+
+// Gain calculation:
+  @(initial_step) DBinc = (dbmax-dbmin)/7;            // compute per-bit increment
+  Gint = `L(GAIN[2])*4 + `L(GAIN[1])*2 + `L(GAIN[0]); // get integer form of GAIN
+  Adb = dbmin + DBinc*Gint;                           // convert to gain in dB
+  Av = transition( Active? pow(10,Adb/20.0):1u, 0,Tr);        // to V/V or small if off
+
+// Output signal evaluation:
+  Voctr = transition(Active,0,Tr)*V(VDD,VSS)/2;                       // CM output level wrt Vss
+  Vomax = max(V(VDD,VSS),0.001);                                      // max swing of output
+  Vodif = Vomax*tanh(Av*V(INP,INN)/Vomax);                            // gain & saturation limiting
+
+// Driver output pins with differential Gain*input at Rout if active,
+// high impedance if disabled, or high attenuation on bias error:
+  Gout = transition( `L(EN)? 1/Rout:1n, 0,Tr);
+
+  I(OUTP,VSS) <+ (V(OUTP,VSS) - (Voctr+Vodif/2)) * Gout;
+  I(OUTN,VSS) <+ (V(OUTN,VSS) - (Voctr+Vodif/2)) * Gout;
+
+end
+endmodule
