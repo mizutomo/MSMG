@@ -16,6 +16,7 @@ parameter real Tr=10n;        // rise/fall time for gain & enable changes
 real DBinc, Adb, Av;          // terms in gain calculation
 real Voctr,Vomax,Vodif;       // terms in output calculation
 real Gout;                    // output conductance (smoothly switched)
+integer Gint;                 // integer value from gain bus
 integer Active;               // flag for active operation
 
 // Macro to convert pin coltage to logic level of 1 or 0 based on half supply:
@@ -23,7 +24,7 @@ integer Active;               // flag for active operation
 
 analog begin
 // Check when enabled & biased properly:
-  Avtive = `L(EN)==1 && V(VDD,VSS)>=2.0 && abs(V(VB,VSS)-0.7)<=0.05;
+  Active = `L(EN)==1 && V(VDD,VSS)>=2.0 && abs(V(VB,VSS)-0.7)<=0.05;
 
 // Gain calculation:
   @(initial_step) DBinc = (dbmax-dbmin)/7;            // compute per-bit increment
@@ -45,3 +46,4 @@ analog begin
 
 end
 endmodule
+
