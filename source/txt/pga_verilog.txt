@@ -1,0 +1,32 @@
+`include "disciplines.vams"
+
+module PGA (OUTP,OUTN, INP,INN, GAIN, VB, VDD,VSS, EN);
+output OUTP,OUTN;               // differential output
+input  INP,INN;                 // differential input
+input [2:0] GAIN;               // digital control bus
+input VDD,VSS,VB;               // power supplies & bias voltage input
+input EN;                       // output enable
+// note that all the signals are just digital here - no analog contet.
+
+parameter real dbmin=-1;        // gain for VCVGA=000
+parameter real dbmax=20;        // gain for VCVGA=111
+real DBinc, Adb, Av;            // terms in gain calculation
+
+initial DBinc=(dbmax-dbmin)/7;  // compute per-bit change to db gain
+always begin
+  if( (^GAIN)===1'bx ) Adb=-40; // low gain if invalid control input
+  else Adb=dbmin+DBinc*GAIN;    // compute gain in dB
+  Av=pow(10,Adb/20.0);		// convert to V/V
+  @(GAIN);                      // recompute on gain bus change
+end
+
+// Check if EN=1, VDD=1, VSS=0, VB=1, and GAIN bits are all valid:
+  wire Active = ({EN,VDD,VSS,VB}===4'b1101) && ((^GAIN)!==1'bx);
+
+// Pass input to output if active; high impedance when disabled,
+// any other case output goes to invalid:
+  assign OUTP = Active? INP : !EN? 1'bz : 1'bx;
+  assign OUTN = Active? INN : !EN? 1'bz : 1'bx;
+
+endmodule
+

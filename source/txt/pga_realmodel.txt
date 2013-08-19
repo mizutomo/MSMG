@@ -1,0 +1,42 @@
+`include "disciplines.vams"
+
+module PGA (OUTP,OUTN, INP,INN, GAIN, VB, VDD,VSS, EN);
+output OUTP,OUTN;               // differential output
+input  INP,INN;                 // differential input
+input [2:0] GAIN;               // digital control bus
+input VDD,VSS,VB;               // power supplies & bias voltage input
+input EN;                       // output enable
+wreal OUTP,OUTN, INP,INN, VB, VDD,VSS;
+
+parameter real dbmin=-1;        // gain for VCVGA=000
+parameter real dbmax=20;        // gain for VCVGA=111
+real DBinc, Adb, Av;            // terms in gain calculation
+real Voctr,Vomax,Vodif;         // terms in output calculation
+
+initial DBinc=(dbmax-dbmin)/7;  // compute per-bit change to db gain
+always begin
+  if( (^GAIN)===1'bx ) Adb=-40; // low gain if invalid control input
+  else Adb=dbmin+DBinc*GAIN;    // compute gain in dB
+  Av=pow(10,Adb/20.0);		// convert to V/V
+  @(GAIN);                      // recompute on gain bus change
+end
+
+// Check device is active (EN high, supply & bias correct):
+  wire Active = (EN===1'b1) && (VDD-VSS>=2.0) && abs(VB-VSS-0.7)<=0.05;
+  always begin
+    Voctr = Active*(VDD-VSS)/2;                        			// CM output level wrt Vss
+    Vomax = max(VDD-VSS),0.001);                                        // max swing of output
+    @(VDD,VSS,Active);							// repeat when supplies change
+  end
+
+// define saturation limiting & high attenuation when inactive:
+  always @(*) Vodiff =Vomax*tanh(Av*(INP-INN)/Vomax)*(Active? 1:1e-6);
+
+// output the differential real signal if actively biased;
+// high impedance if not enabled, otherwise X output:
+
+  assign OUTP = Active? Voctr+Vodif/2 : !EN? `wrealZstate: `wrealXstate;
+  assign OUTN = Active? Voctr-Vodif/2 : !EN? `wrealZstate: `wrealXstate;
+
+endmodule
+
