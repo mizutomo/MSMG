@@ -855,6 +855,135 @@
 </div></blockquote>
 </div>
 </div>
+<div class="section" id="additional-model-coding-examples">
+<h2>Additional Model Coding Examples<a class="headerlink" href="#additional-model-coding-examples" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">このセクションでは以下の四つのモデリングアプローチそれぞれを用いて、Verilog-AMSの代表的なモデルを示す。</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>Dフリップフロップのデジタルモデル</li>
+<li>オペアンプのアナログモデル</li>
+<li>ADコンバータのAMSモデル</li>
+<li>離散時間ローパスフィルタのRNモデル</li>
+</ul>
+</div></blockquote>
+<div class="section" id="digital-verilog-d-type-flip-flop">
+<h3>Digital: Verilog D-type Flip Flop<a class="headerlink" href="#digital-verilog-d-type-flip-flop" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul>
+<li><p class="first">Verilog言語は論理的関係性を定義</p>
+</li>
+<li><p class="first">ここでは標準Verilogフォーマットによって書かれたD-FFモデルを例に述べる</p>
+</li>
+<li><div class="first line-block">
+<div class="line">この例では入力Clockのエッジを読み込み、出力Qにはデータ入力が読み込まれ通される</div>
+<div class="line">出力Qbは常に出力Qの補出力である</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">モデルは非同期リセット式</div>
+<div class="line">ResetがhighのときはいつでもQは0になる</div>
+</div>
+</li>
+<li><p class="first">以下にD-FFの簡単な記述を示す</p>
+</li>
+</ul>
+<div class="highlight-verilog"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">module</span> <span class="no">DFF1</span> <span class="p">(</span><span class="no">Q</span><span class="p">,</span> <span class="n">Qb</span><span class="p">,</span> <span class="n">Data</span><span class="p">,</span> <span class="n">Clock</span><span class="p">,</span> <span class="n">Reset</span><span class="p">);</span>     <span class="c1">// name of module, list of pins</span>
+   <span class="k">output</span> <span class="no">Q</span><span class="p">,</span><span class="n">Qb</span><span class="p">;</span>                              <span class="c1">// nomal and inverted output</span>
+   <span class="k">input</span>  <span class="n">Data</span><span class="p">,</span><span class="n">Clock</span><span class="p">,</span><span class="n">Reset</span><span class="p">;</span>                  <span class="c1">// data in, clock, asynch reset</span>
+   <span class="kt">reg</span>    <span class="no">Q</span><span class="p">,</span>                                 <span class="c1">// register for output signal to drive</span>
+   <span class="k">always</span> <span class="p">@(</span><span class="k">posedge</span> <span class="n">Clock</span> <span class="k">or</span> <span class="k">posedge</span> <span class="n">Reset</span><span class="p">)</span>  <span class="c1">// when clock or reset fo high</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">Reset</span><span class="p">)</span> <span class="no">Q</span> <span class="o">=</span> <span class="mh">1&#39;b0</span><span class="p">;</span>                   <span class="c1">// if reset is high, output goes zero</span>
+      <span class="k">else</span>       <span class="no">Q</span> <span class="o">=</span> <span class="n">Data</span><span class="p">;</span>                   <span class="c1">// otherwise on clock edge get data</span>
+   <span class="k">assign</span> <span class="n">Qb</span> <span class="o">=</span> <span class="o">~</span><span class="no">Q</span><span class="p">;</span>                           <span class="c1">// degine notQ output to be inverse of Q</span>
+<span class="k">endmodule</span>
+</pre></div>
+</td></tr></table></div>
+<ul>
+<li><p class="first">Q出力はClockかResetの立上りエッジで更新される</p>
+</li>
+<li><div class="first line-block">
+<div class="line">Qbノードの更新はQ信号の反転と同等の値が連続的に保たたれるように代入文を使用される</div>
+<div class="line">動作コードによって駆動していないため、Qbはreg宣言されない</div>
+</div>
+</li>
+<li><p class="first">以下にD-FFの動作をチェックする簡単なテストベンチを示す</p>
+</li>
+</ul>
+<div class="highlight-verilog"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="no">`timescale</span> <span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">1</span><span class="n">ps</span>
+<span class="k">module</span> <span class="no">DFF_TB</span><span class="p">;</span>
+   <span class="kt">reg</span> <span class="no">D</span><span class="o">=</span><span class="mh">1</span><span class="p">,</span><span class="no">CK</span><span class="o">=</span><span class="mh">0</span><span class="p">,</span><span class="no">RST</span><span class="o">=</span><span class="mh">0</span><span class="p">;</span>
+   <span class="no">DFF1</span> <span class="no">DUT</span><span class="p">(.</span><span class="no">Q</span><span class="p">(</span><span class="no">Q</span><span class="p">),</span> <span class="p">.</span><span class="n">Qb</span><span class="p">(</span><span class="no">QB</span><span class="p">),</span> <span class="p">.</span><span class="n">Data</span><span class="p">(</span><span class="no">D</span><span class="p">),</span> <span class="p">.</span><span class="n">Clock</span><span class="p">(</span><span class="no">CK</span><span class="p">),</span> <span class="p">.</span><span class="n">Reset</span><span class="p">(</span><span class="no">RST</span><span class="p">));</span>
+   <span class="k">always</span> <span class="p">#</span><span class="mh">5</span> <span class="no">CK</span> <span class="o">=</span> <span class="o">~</span><span class="no">CK</span><span class="p">;</span>
+   <span class="k">initial</span> <span class="k">begin</span>
+      <span class="p">#</span><span class="mh">13</span> <span class="no">D</span><span class="o">=</span><span class="mh">0</span><span class="p">;</span>
+      <span class="p">#</span><span class="mh">15</span> <span class="no">D</span><span class="o">=</span><span class="mh">1</span><span class="p">;</span>
+      <span class="p">#</span><span class="mh">10</span> <span class="no">RST</span><span class="o">=</span><span class="mh">1</span><span class="p">;</span>
+      <span class="p">#</span><span class="mh">10</span> <span class="no">RST</span><span class="o">=</span><span class="mh">0</span><span class="p">;</span>
+      <span class="p">#</span><span class="mh">22</span> <span class="nb">$stop</span><span class="p">;</span>
+   <span class="k">end</span>
+<span class="k">endmodule</span>
+</pre></div>
+</td></tr></table></div>
+<ul>
+<li><p class="first">DFF_TBは外部ピンが必要とされないシミュレーションのトップレベルのテストベンチモジュール</p>
+</li>
+<li><p class="first">DFF1モジュールはインスタンスDUTとしてインスタンス化され、Clockへ100MHzのパルス波を打ち込み、そしてDataとResetを数度変化させることで期待通りにブロックが動作するかの検証を行い、モジュールではこれらで駆動する信号とレジスタを定義する</p>
+</li>
+<li><p class="first">留意すべきは、離散timescaleはこのテストベンチモジュールのために規定されているということである</p>
+</li>
+<li><div class="first line-block">
+<div class="line">すべての離散およびミックスドシグナルのVerilogブロックは、離散時間のためのresolutionとtime unitを定義するために複数のtimescaleを利用する</div>
+<div class="line">ここで示したようにモジュールに、標準includeファイル内で、コンパイラオプションで、など定義場所問わない</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">システム内で遅延定義のために#演算子を用いている</div>
+<div class="line">モジュール固有の演算子(この場合は#)はここで定義するためにtime unitを必要とする</div>
+<div class="line">このケースではtime unitはnsで定義され、#5は5nsを示す</div>
+</div>
+</li>
+<li><p class="first">モジュールがあらゆるところで一貫して定義されるように、プロジェクトのtimescaleとresolutionを定めなければならないことに注意</p>
+</li>
+<li><p class="first">一般的に、(もっとも一般的に1nsか1psの時間単位)デジタルモデルの標準的な実行と、(システム速度に応じて1nsから1asにわたる)プロジェクト条件に基づいてきまるresolutionによって選ばれる。</p>
+</li>
+<li><p class="first">DFF1_TBモジュールのシミュレーション波形結果を以下に示す</p>
+</li>
+</ul>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/fig4.png"><img alt="_images/fig4.png" src="_images/fig4.png" /></a>
+</div>
+<ul class="simple">
+<li>Qは初期値を設定していないため、Data入力がassignされるClockの最初の立上りエッジまでは不定値(X)であることに注意</li>
+<li>DataがHigh/Lowに変化すると、次のClockの立上りエッジでQの値が変化する</li>
+<li>ResetがHighになるとすぐにQはLowになり、ResetがHighの間はClockが叩かれてDataの値が変化してもQには影響しない</li>
+<li>Resetが解放されると、次のClockの立上りエッジで再びDataの値をQへと伝搬させる</li>
+<li>Qbは常にQの反転である</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
 </div>
 
 
@@ -870,6 +999,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#modeling-classifications">Modeling classifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#types-of-modeling">Types of Modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#basic-moeling-formats">Basic Moeling Formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-model-coding-examples">Additional Model Coding Examples</a></li>
 </ul>
 </li>
 </ul>
