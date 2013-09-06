@@ -1,0 +1,36 @@
+`include "disciplines.vams"
+
+module Amp1(inp, inm, out, vdd, vss);
+  input inp, inm, vdd, vss;
+  output out;
+
+  electrical inp, inm, out, vdd, vss, N;
+
+  parameter real Gain = 1k;   // DC gain (V/V)
+  parameter real Vio = 0;     // input offset (V)
+  parameter real GBW = 10M;   // Gain-Bandwidth product (Hz)
+  parameter real Rdc = 300;   // DC output resistance (ohms)
+  parameter real Rac = 100;   // AC & Sat output resistance (ohms)
+
+  real Gm, Rres, Ccap, Vnom;  // internal variables;
+
+  // Macro for diode-like exponential dependence between voltae & current:
+  // Returns current of isat when voltage is zero, and decreases by
+  // a factor of 100 for each dV decrease of input voltage:
+  `define fclip(V, isat, dV) isat*exp(4.6*(V)/(dV))
+
+  analog begin
+    @(initial_step) begin                 // constants computed at startup
+      Rres = Rdc - Rac;                   // inner resistor value
+      Gm = Gain / Rres;                   // input transconductance
+      Ccap = 1 / (`M_TWO_PI * GBW / Gm);  // capacitor to get specified GBW
+    end
+
+    // Contributions of current for each branch in the topology diagram:
+    I(N, vss) <+ -GM * V(inp, inm);       // transconductance from input
+    I(N, vss) <+ (V(N, vss) - V(vdd, vss)/2) / Rres;    // resistor equation: I=V/R
+    I(N, vss) <+ ddt(Ccap * V(N, vss));   // capacitor equation: I=d(CV)/dT
+    I(N, vss) <+ `fclip(V(N, vdd), 1, 40m) - `fclip(V(vss, N), 1, 40m);   // top&bottom parts of limiter
+    I(N, out) <+ V(N, out) / Rac;         // series resistance on output
+  end
+endmodule
