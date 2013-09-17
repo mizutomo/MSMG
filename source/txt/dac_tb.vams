@@ -1,0 +1,28 @@
+module DAC6_TB;
+electrical Aout,Vdd,Vss;            // analog pins
+real Vsup,Vgnd,Tr;                  // control variables to drive analog supplies
+reg [5:0] Din;                      // digital input bus
+
+DAC6 DUT(Din,Aout, Vdd,Vss);        // instanciate the digital to analog converter
+
+analog begin                        // analog drive description
+ V(Vdd) <+ transition(Vsup,0,Tr);   // drive the analog supplies
+ V(Vss) <+ transition(Vgnd,0,Tr);   // using the control variables
+end
+
+initial begin                       // This is the sequential test procedure
+ Din=0;                             // Initialize digital input bus to zero
+ Vsup=3; Vgnd=0;                    // Initial 3 volt supply and ground voltage
+ Tr=200n;                           // risetime for supply changes
+ repeat(63) #50 Din=Din+1;          // step Din thru all codes, incrementing every 50ns
+ #100 Din=8'b100000;                // step to half scale input
+ #100 Din=8'b10xx00;                // check response for X input
+ #100 Din=8'b100000;                // back to half scale
+ #100 Vsup=2.4;                     // Check that output follows supply midpoint
+ #300 Vsup=3.0;
+ #300 Vgnd=0.4;                     // Check that it follows negative reference too
+ #300 Vgnd=00;
+ #300 $stop;                        // done with testing
+end
+endmodule
+

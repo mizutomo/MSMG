@@ -1,0 +1,18 @@
+initial begin             // This is the sequential test procedure
+ Vsup=3; Vgnd=0;          // Initial 3 volt supply and ground voltage
+ Tr=100n;                 // risetime for supply changes
+ for (i=0; i<64; i=i+1) D2Acheck(i);      // check all 64 codes
+ D2Acheck(32);            // check midrange point
+ Vsup=2.4;  #100          // ramp to new supply voltage
+ D2Acheck(32);            // recheck midrange point
+ Vsup=3;  #100
+ Vgnd=0.4;  #100          // switch to different negative reference
+ D2Acheck(32);            // recheck midrange point
+ #100 Vgnd=0;
+ #100 if (CountErr==0) $display("*SpecPASS - DAC8: all %d tests passed",CountOK);
+   else $display("*SpecFAIL - DAC8: %d failures out of %d tests",
+                CountErr, CountErr+CountOK);
+ #1 $stop;                // done with testing
+end
+
+
