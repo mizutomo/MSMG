@@ -1,0 +1,16 @@
+module mux0(SEL,IN0,IN1,OUT);
+input SEL;     logic SEL;
+input IN0,IN1; 
+output OUT;
+electrical IN0,IN1,OUT;
+
+parameter real Tr=1n;				// rise/fall time to change between states
+parameter real Ron=100;				// "on" resistance of the switches
+parameter real Roff=1G;				// "off" resistance of the switches
+
+  analog begin
+    I(IN0,OUT) <+ V(IN0,OUT)*transition((SEL===0)? 1/Ron : 1/Roff, 0,Tr);
+    I(IN1,OUT) <+ V(IN1,OUT)*transition((SEL===1)? 1/Ron : 1/Roff, 0,Tr);
+  end
+
+end module

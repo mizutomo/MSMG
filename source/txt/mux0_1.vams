@@ -1,0 +1,11 @@
+module mux0(SEL,IN0,IN1,OUT);
+input SEL;     logic SEL;
+input IN0,IN1; 
+output OUT;
+electrical IN0,IN1,OUT;
+
+  analog begin
+    if (SEL) V(OUT)<+V(IN1);			// driver output with IN1 when SEL=1
+    else     V(OUT)<+V(IN0);    		// driver output with IN0 when SEL=0
+  end
+end module
