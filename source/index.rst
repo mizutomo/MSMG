@@ -12,6 +12,7 @@ Contents:
   :maxdepth: 3
 
   Ch3_AMS_Behavioral_Modeling
+  Ch4_Mixed-Signal_Verification_Methodology
 
 
 
