@@ -908,6 +908,9 @@ Example of Modeling with Proper Continuity
   | 一般的動作の自然なモデリングは、スイッチのON/OFFをモデル化するのに最も効果的な方法で、理想的なモデルは結局のところ問題を作り込むに過ぎない。
 
 
+      .. figure:: ./img/sim_mux0_tr.png
+        :scale: 100%
+
 Modeling Systems with Direct Feedback
 ------------------------------------------------
 
