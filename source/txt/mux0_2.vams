@@ -9,7 +9,7 @@ real ASEL;
 
   analog begin
     ASEL = transition(SEL,0,Tr);		// ramp between 0 and 1
-    V(OUT) <+ ASEL*V(IN1) + (1-ASEL)*V(IN0)	// ramp one on, one off on change
+    V(OUT) <+ ASEL*V(IN1) + (1-ASEL)*V(IN0);	// ramp one on, one off on change
   end
 
 end module
