@@ -1,0 +1,17 @@
+module samp(OUT, IN);                  // sample input at fixed rate, pass to output
+  output OUT;
+  input  IN;
+  wreal  IN,OUT;
+  
+  parameter Ts=10;                     // sampling interval (ns)
+  parameter vwig=1p;                   // output wiggle added when no change (V)
+  
+  real Vout;                           // variable for output drive value
+  
+  always begin
+    Vout = (IN==Vout)? IN+vwing : IN;  // if input is constant, output wiggles by 1pV
+    #Ts;                               // at each timepoint so that data stream has
+  end                                  // change at fixed rate
+  
+  assign OUT = Vout;                   // drive sampled signal to output
+endmodule
