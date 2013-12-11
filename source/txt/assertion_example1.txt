@@ -1,0 +1,21 @@
+// Generic Verilog-AMS assertion macros:
+// `ACHECK(Val,Max,Min,Desc,Name,Flg,En,Td,Vtol) analog Value check
+// `DCHECK(Val,Max,Min,Desc,Name,Flg,En,Td)      discrete vale check
+// `XCHECH(Val,Name,Flag,En,Td)                  check bus for X
+// `COMP_CHECK(DP,DN,Name,Out,En,Td)             Out-DP if complementary, else X
+//
+// Process Specific assertion macros:
+// macro        arguments                      nominal       range
+// ----------- ------------------------------- ----------- ----------
+// `DVDD_CHECK(node,"name",ef,en)                 1          +-10%
+// `AVDD_CHECK(node,"name",ef,en)                 1          +-10%
+// `AVDDH_CHECK(node,"name",ef,en)                2.5        +-10%
+// `GND_CHECK(node,"name",ef,en)                  0          +-0.1
+// `IBIAS_CHECK(expr,"name",nom,ef,en)            nom        +-10%
+// `VBIAS_CHECK(expr,"name",nom,ef,en)            nom        +-10%
+// `RANGE_CHECK(expr,"name",Max,Min,ef,en)        check for in range
+// `DX_CHECK(expr,"name",errflg,en)               checks bus for any `X'
+//
+// Useful macro functions:
+// `FCUROUT(N1,N2,Iref,Kgain,Tr,dV,Ioff)          Current mirror output driver    
+
