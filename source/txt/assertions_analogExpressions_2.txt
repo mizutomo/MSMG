@@ -1,0 +1,3 @@
+electrical sig1, sig2, sig3;
+reg a, b;
+// psl assert always ({(V(sig1)>0.1; a} |=> {V(sig2) < 0.3;b}) @(cross(V(sig3) - 0.0));

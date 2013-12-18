@@ -590,6 +590,32 @@ Using PSL with Verilog-AMS
 PSL Assertions Involving Analog Expressions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* | いくつかのAMS評価ツールは、最近では二値判定のPSL Assertionで表現する事が出来るようなアナログ評価式をクロック評価式の中でサポートします。
+  | そして、プロパティの実際の独立変数と順序によってトップレベルのクロック信号が明白に定義されている時、又はデフォルトクロックを通して定義されている時の例を上げます。
+
+  .. literalinclude:: ./txt/assertions_analogExpressions_1.txt
+    :linenos:
+    :language: verilog
+
+  | V(sig)>0の場合、常に次のbが1である事を評価する。
+  | clkの立ち上がりをclockと定義
+  | V(sig1) > 0.0の場合、常に次のクロックサイクルで、V(sig2)<0.3である事を常に評価する。
+
+
+Analog Events for Asserrtion Clocking
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Verilog-AMSアナログイベントファンクション crossとaboveは、PSL assertionにおいてクロックイベントをサポートする。
+
+  .. literalinclude:: ./txt/assertions_analogExpressions_2.txt
+    :linenos:
+    :language: verilog
+
+  | V(sig3)が0.0をクロスする場合
+  | V(sig1)>0.1ならば、その次のクロックサイクルでV(sig2)<0.3である事を評価する。
+
+Support for wreal in PSL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   .. image:: ./img/Electrical2RealConversion.png
      :alt: Figure 2. Example of Electrical to Real Conversion

@@ -1,0 +1,9 @@
+electrical sig;
+reg a, b, clik;
+// top-level clock specified in the assertion
+// psl assert always (V(sig) > 0 -> next(b)) @(posedge clk);
+
+// the default clock is inferred as the top-level clock
+// psl default clock = (posedge clk);
+// psl property P1 = always {a;V(sig1) > 0.0} |=> {V(sig2) < 0.3;b};
+// psl assert P1;
