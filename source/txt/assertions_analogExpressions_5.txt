@@ -1,0 +1,5 @@
+vunit myvunit(test) {
+  property P1 = ({V(sig1)>0.0} -> next( V(sig2)<0.3)@(cross(V(sig3) - 0.0));
+  assert P1;
+}
+

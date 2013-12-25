@@ -1,0 +1,3 @@
+vunit myvunit(test) {
+  assert (V(sig1)>1.4) @cross(V(sig3) - 0.0 ));
+}

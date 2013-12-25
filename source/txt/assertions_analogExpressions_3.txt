@@ -1,0 +1,5 @@
+wreal mywreal1, mywreal2;
+reg clk;
+// psl assert always({mywreal1 > 4.4; mywreal2 < 6.6}) @(posedge clk);
+
+

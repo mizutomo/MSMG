@@ -1,0 +1,22 @@
+module top;
+  var real r, xr, w;
+  assign xr=3.14;
+  ams_electrical_src e_sl(r);  // causes insertion of Electrical2Real connection moduke
+  ams_electrical_dst e_dl(xr); // causes insertion of Real2Electrical connection module
+  ams_wreal_src      w_sl(wr); // Coercion of SystemVerilog real variable to wreal
+endmodule
+
+module ams_electrical_dst(e);
+  input 2; electrical e;
+  initial #10 $display("%M: %f", V(e));
+endmodule
+
+module ams_electrical_src(e);
+  output e; electrical e;
+  analog V(e) <+ 5.0;
+endmodule
+
+module ams_wreal_src(w);
+  output w; wreal w;
+  assign w=2.5;
+endmodule
