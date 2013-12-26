@@ -1,0 +1,3 @@
+input var real outp, outm;
+simple_SVA_example: assert property (@(posedge(hold))
+  ((outp-outm)<10));
