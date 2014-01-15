@@ -1,0 +1,19 @@
+// INTEFRATORS and DIFF JUNCTIONS, basic behavior
+// Check that integrators preserve sign of arithmetic operations
+// ie. assert that when V(in) and V(I1) both positive, and comparator feedback is negative,
+// then the first integrator output in the next cysle must be positive.
+// Ditto with polarities flipped
+pos_ingeg1: assert always { i1_inputs_pos } |=> i1_pos;
+neg_integ1: assert always { (V(X) < 0.0) && (V(I1) < 0.0) && (V(Y) >= V(Vref)) } |=> V(I1) < 0.0;
+
+// COMPARATOR BASIC FUNCTIONALITY
+// if the input to the comparator (intergrator 2 ouput) is positive,
+// ensure the compatator detects that immediately, and vice versa
+compatator_pos: assert always ((V(I2) > 0.001) -> (V(Y) >= V(Vref));
+compatator_neg: assert always ((V(I2) < -0.001) -> (V(Y) <= -V(Vref));
+
+// ensure integrator 2 output above threshold before comparator output goes high
+// if I2 output is positive, then ensure it goes high before (or at) the time the comparator output is high
+integ_to_comp1: assert always V(I2) < 0.0 -> V(I2) >= 0.0 before V(Y) >= V(Vref);
+//if comparator output is negative, then ensure it stays negative until integrator 2 ouput positive
+integ_to_comp2: assert always V(Y) <= -V(Vref) -> V(Y) <= -V(Vref) until V(I2) >= 0.0;
