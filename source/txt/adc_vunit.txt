@@ -1,0 +1,21 @@
+vunit my_psl_vunit_all(ADC) {
+  // DEFAULTCLOCK FOR ASSERTIONS
+  default clock = (cross(V(vkl), +1));
+  
+  // modeling layer. Create some wxpression placeholders(used in pos_integ1 assertion)
+  integer i1_pos, i1_inputs_pos;
+  integer vx_le_half_vref;
+  real abs_vx, abs_vref, abs_vi1, abs_vi2;
+  integer abs_vx_close_0;
+  
+  analog begin
+    i1_pos = V(I1) > 0.0;
+    i1_inputs_pos = (V(X) > 0.0) && (V(I1) > 0.0) && (V(Y) <= -V(Vref));
+    vx_le_half_vref = abs(V(X)) <= abs(V(Vref))/2.0;
+    abs_vx = abs(V(X));
+    abs_vref = abs(V(Vref));
+    abs_vi1 = abs(V(I1));
+    abs_vi2 = abs(V(I2));
+    abs_vx_close_0 = abs(V(X)) <= 0.005;
+  end
+}

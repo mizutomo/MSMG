@@ -1,0 +1,20 @@
+// INPUT ASSUMPRION PROPERIES
+// assert at every oversampling clock that the input voltage is constrained
+// within half of Vref to avoid risking instability
+vin_less_vref: assume always abs_vx <= abs_vref/2.0;
+
+// STABILLTY PROPERTOES
+// assert that integrator output are bounded within +/-1.5*vref
+// as instability tends to force integrator ouputs out of bounds
+integ1_bounded: assert never abs_vi1 > 1.5*V(Vref);
+integ2_bounded: assert never abs_vi2 > 1.5*V(Vref);
+
+// ensure that a LONG (7 in a row) sequence of CONSECUTIVE
+// ones or zeros from the comparator does't happen, as this would also indicate instability
+no_long_one_seq: assert never { V(Y) >= V(Vref)[*7] };
+no_long_zero_seq: assert never { V(Y) <= -V(Vref)[*7] };
+
+// test for limit cycle sequence of 1100110011001100
+limit_cycle_p1: assert never { { {V(Y) >= V(Vref)[*2] ; V(Y) <= -V(Vref)[*2] }[*2] }[*2] };
+// test for limit cycle sequence of 0011001100110011
+limit_cycle_p2: assert never { { {V(Y) <= -V(Vref)[*2] ; V(Y) >= V(Vref)[*2] }[*2] }[*2] };
