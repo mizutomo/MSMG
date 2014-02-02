@@ -1478,6 +1478,9 @@ Closing the Loop between Regression and Plan
 
 * シミューレーションセッションの最後に、全ての結果が解析され、カバレッジデータが集計される。収集されたカバレッジデータは、検証プランにマッピングされ、レグレッションマネージメントツールにロードされる。レグレッションテストが完全に行われた場合、検証計画時に作られた検証プランにロードされ、オジリナルの検証プランに基づいてカバレッジが解析される。図16に、アナログカバレッジを収集した例を示す(これは、"Mixed-Signal Verification Planの節で取り上げた可変ゲインアンプ(VGA)の例である)。
 
+  .. figure:: ./img/ch4_fig16.png
+    :alt: Figure16: Analog Coverage in a Verification Plan
+
 
 Updating the SoC-level Test Plan
 --------------------------------------------------
