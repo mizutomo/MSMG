@@ -1525,18 +1525,24 @@ Integrating into SoC-level Testbench
 Adding Coverage and Checking
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*
+* カバレッジ、及び、チェッカは、観察対象に影響をおよぼすものではないので、簡単に組み込むことができる。特に、UVMのアーキテクチャは、コンポーネントがモジュール化されており、更に独立しているため、容易に組み込めるように設計されている。ただし、シミュレーション性能に対しての影響は考慮する必要がある。特に、SoCの検証では、性能は非常に重要であるため、よく考慮する必要がある。モニタによるカバレッジとチェック項目の回収を検証プランで調査しておくことは、統合の際に非常に重要なことである。
 
 .. * Coverage and checking monitors are easier to integrate, as they are non-intrusive observers. The UVM architecture ensures that integration is simple, because these components are modular and independent. Consider the impact of the monitor on simulation performance, keeping in mind that the SoC environment is much more performance hungry. Consult the verification plan to ensure the coverage and checking collected by the monitor is considered important for the integration.
 
 The Advantage of Assertions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. * Assertions are considered a part of the testbench, but they are intended to follow the design. Assertions are mostly low impact and can be turned off as needed. It is highly recommended that asssertions are turned on by default, at least during early stages os integration.
+* アサーションはテストベンチの一部と考えら得ているが、本来はデザインに属すべきものである。たいていの場合、アサーションはほとんど影響のないものであり、必要に応じて、オフすることができる。しかし、アサーションはデフォルトではONにすべきである。少なくとも、統合の初期段階では、必ずONにしておくべきである。
+
+.. * Assertions are considered a part of the testbench, but they are intended to follow the design. Assertions are mostly low impact and can be turned off as needed. It is highly recommended that asssertions are turned on by default, at least during early stages of integration.
+
+* ほとんどのアサーションは、初期条件や入力条件を確認するものである。このようなアサーションは、常にアクティブにしておくべきである。
 
 .. * Many assertions monitor initial conditions and input assumptions. Such assertions should always remain active.
 
 Analog Input Sources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* 物理層が配線で接続されたり、無線で接続されるようなIPのインタフェースは、そのままSoCレベルのインタフェースになる。このようなIPの場合、IPレベルのモデルを再利用するか、SoCレベルで新しいモデルを作るかは、求められる機能性による。IPレベルの信号ソースを改良することで、再利用を促すことになるかもしれない。これが、SoCの環境に引き上げるための最初のステップである。さらに、他のソースからも駆動されることになる。IPレベルのテストベンチでは、制約付きランダム検証のアプローチを使用するため、特定の統合ターゲットのニーズに合わせることは、比較的容易である。
 
 .. * Some IP interfaces may become SoC-level interfaces, such as the physical access layer to a wired or wireless medium. The consideration of whether to re-use the IP-lelve model or create a new one at the SoC level depends on the expected functionality. It may make sense to reuse, and possibly enhance the IP-level signal source. This could be the first step for bringing up the SoC environment, then later it can be enhanced or augmented by other sources. Because the IP-level testbench uses a constrained random approach to generate signal properties, it is relatively easy to tune this to the needs of the specific integration target.
