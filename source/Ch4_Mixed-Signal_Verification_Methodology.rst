@@ -1546,3 +1546,65 @@ Analog Input Sources
 * 物理層が配線で接続されたり、無線で接続されるようなIPのインタフェースは、そのままSoCレベルのインタフェースになる。このようなIPの場合、IPレベルのモデルを再利用するか、SoCレベルで新しいモデルを作るかは、求められる機能性による。IPレベルの信号ソースを改良することで、再利用を促すことになるかもしれない。これが、SoCの環境に引き上げるための最初のステップである。さらに、他のソースからも駆動されることになる。IPレベルのテストベンチでは、制約付きランダム検証のアプローチを使用するため、特定の統合ターゲットのニーズに合わせることは、比較的容易である。
 
 .. * Some IP interfaces may become SoC-level interfaces, such as the physical access layer to a wired or wireless medium. The consideration of whether to re-use the IP-lelve model or create a new one at the SoC level depends on the expected functionality. It may make sense to reuse, and possibly enhance the IP-level signal source. This could be the first step for bringing up the SoC environment, then later it can be enhanced or augmented by other sources. Because the IP-level testbench uses a constrained random approach to generate signal properties, it is relatively easy to tune this to the needs of the specific integration target.
+
+
+Verifying Low-Power Intent in Mixed-Signal Design
+==================================================
+
+Introduction to Low Power
+--------------------------------------------------
+
+
+Review of Basic Low-Power Features
+--------------------------------------------------
+
+Power Domain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Isolation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+State Retention
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Nominal Condition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Power Mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Power Shut Off
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Multiple Supply Voltage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Low Power in Mixed-Signal
+--------------------------------------------------
+
+
+Logic to Electrical Conversion
+--------------------------------------------------
+
+
+Electrical to Logic Conversion
+--------------------------------------------------
+
+
+Controlloing Analog Power Supply with Low-Power Specification
+-----------------------------------------------------------------
+
+
+Changes in Low-Power Verification in Mixed-Signal
+==================================================
+
+Reference Voltage Selection for Power-Aware Electrical to Logic Conversion
+------------------------------------------------------------------------------
+
+
+Multiple Drivers and Nominal Voltage Related Conflicts
+----------------------------------------------------------
+
+Example
+^^^^^^^^^^^
