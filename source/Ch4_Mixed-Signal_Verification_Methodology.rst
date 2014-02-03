@@ -1518,11 +1518,25 @@ Interface Consistency for SoC-level Model Switching
 Integrating into SoC-level Testbench
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* 検証コンポーネントをIPレベルからSoCレベルまで再利用することで、見通しが良くなる。このような組み込み用コンポーネントは、既に高精度にキャラクタライズされているものであるため、IPの開発に幅広く使用することができる。
+
+.. * The benefit of reusing verification components from IP to the SoC-level environment is often overlooked. Embedded in such component is the most accurate characterization of behavior available, one that was extensively used while developing the IP.
+
 Adding Coverage and Checking
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*
+
+.. * Coverage and checking monitors are easier to integrate, as they are non-intrusive observers. The UVM architecture ensures that integration is simple, because these components are modular and independent. Consider the impact of the monitor on simulation performance, keeping in mind that the SoC environment is much more performance hungry. Consult the verification plan to ensure the coverage and checking collected by the monitor is considered important for the integration.
 
 The Advantage of Assertions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. * Assertions are considered a part of the testbench, but they are intended to follow the design. Assertions are mostly low impact and can be turned off as needed. It is highly recommended that asssertions are turned on by default, at least during early stages os integration.
+
+.. * Many assertions monitor initial conditions and input assumptions. Such assertions should always remain active.
+
 Analog Input Sources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. * Some IP interfaces may become SoC-level interfaces, such as the physical access layer to a wired or wireless medium. The consideration of whether to re-use the IP-lelve model or create a new one at the SoC level depends on the expected functionality. It may make sense to reuse, and possibly enhance the IP-level signal source. This could be the first step for bringing up the SoC environment, then later it can be enhanced or augmented by other sources. Because the IP-level testbench uses a constrained random approach to generate signal properties, it is relatively easy to tune this to the needs of the specific integration target.
