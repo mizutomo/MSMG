@@ -1657,10 +1657,27 @@ Power Shut Off
 Multiple Supply Voltage
 --------------------------------------------------
 
+* Assigning different power domains with different supply voltages is a common technique to achieve trade-off between power consumption and powerformance requirements.
+
+* There are three power domains in the example in Figure 19, each at a different voltage level(PD1 at 0.8V, PD2, at 1.2V and PD3 at 1.8V). Note the presense of level shifters between the power domains so that signals can pass from one domain to another across different voltage levels.
+
+  .. figure:: ./img/ch4_fig19.png
+    :alt: Figure19: Schematic Diagram of Multiple Power Domains
+
 
 Low Power in Mixed-Signal
 --------------------------------------------------
 
+* A mixed-signal design integrates both analog and digital functionality on the same chip. The interaction between an analog and digital sub sysyhtem is central to how a mixed-signal design works. When such interactions is manifested in the form of signals passing across the analog and digital domain boundary, the signal value must be converted and this is achieved by inserting logic-to-electrical and electrical-to-logic connect modules.
+
+* In a power aware mixed-signal simulation, it is common for a block in a discrete domain with power intent specified on the block using CPF to connect to another block belongings to the continous domain. In such a situation, the process of logic to electrical or electrical to logic value conversion must take the power intent aspect into account. It is with this background, that power-aware value conversion aspects and requirements of mixed-signal simulations are introduced are now being implemented by vendors.
+
+* In order to explain the role of power-aware value conversion, consider Figure 20.
+
+  .. figure:: ./img/ch4_fig20.png
+    :alt: Figure20: A Mixed-Signal Design with Power Domains
+
+* Digital block dig_A belongs to the power domain named PD1 and is driving an analog block called ana_B which belongs to power domain PD2. This analog block in turn is driving another digital block called dig_C that belongs to power domain PD3. Note also that all the three power domains have two operating voltages - one with 1.8V and the other with 1.2V.
 
 Logic to Electrical Conversion
 --------------------------------------------------
