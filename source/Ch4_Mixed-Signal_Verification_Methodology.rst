@@ -1603,14 +1603,55 @@ Isolation
 State Retention
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* 電源をシャットオフした時、順序回路(レジスタ, ラッチ, フリップフロップ)の状態を保存しておき、シャットオフの期間中、データを保持しておかんければならない。そうすることで、電源供給を復帰させた時に、素早いリカバリが可能に成る。また、パワーアップシーケンスを速くするためにも、状態をシャットオフ前に戻さないといけない。これを実現するシーケンスエレメントは、特別な状態保持セルによって実装される。
+
+* CPFにおける状態保持ルールの記述を以下に示す。
+
+  ::
+
+    crate_state_retention_rule \
+      -name SR1 -domain Pd_A \
+      -restore_edge pm_sr_a
+
 Nominal Condition
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Nominal Conditionは、デザインやブロックが動作する通常の状態を表している。動作条件は、パワードメイン内の電源分配網の電圧条件によって決まる。すなわち、パワー電圧・グラウンド電圧・PMOS/NMOSトランジスタの基板電圧である。どのNominal Conditionもパワーオン/オフ/スタンバイの状態で指定される。
+
+* CPFにおけるNominal Conditionの設定を以下に示す。
+
+  ::
+
+    create_nominal_condition -name high \
+      -voltage 1.8 -state on
+    create_nominal_condition -name low \
+      -voltage 1.2 -state standby
+    create_nominal_condition -name off \
+      -voltage 0.0 -state 0ff
 
 Power Mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* Power Modeは、全てのPower DomainのNominal Conditionの状態(どのような状態で動作するか)を定義するものである。言い換えると、Power Modeは、それぞれのPower Domainが動作する条件を集めたものである。Power Modeは、有効なPower Domainの動作状態の組み合わせと、無効な組み合わせを指定することができる。もし、どのNominal Conditionの組み合わせも定義されていなければ、イレギュラーなPower Modeとして、低電力仕様が定義される。
+
+* CPFにおけるPower Modeの設定方法を以下に示す。
+
+  ::
+
+    create_power_mode -name ModeD \
+      -domain_conditions {PD1@high PD2@high} -default
+    create_power_mode -name Mode1 \
+      -domain_conditions {PD1@low PD2@high}
+    create_power_mode -name Mode2 \
+      -domain_conditions {PD1@low PD2@low}
+
 Power Shut Off
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Power Shut-Offは、チップの一部だけの電源供給を止める技術である。ブロックの電源供給をシャットダウンするのに先立って、影響を受けるブロックの信号線の接続をアイソレートし、パワーアップシーケンスを最適化するために、順序回路の状態を保存しなければならない。この状態を図18に示す。Mixed-Signalのチップにおいて、パワーアップ/パワーダウンシーケンスの機能検証をする場合、アナログ側において、パワーダウンの状態が正確に反映されるように、デジタルドライバの電圧値が明示されなければならない。これ以降の節で、パワーシャットオフの電圧について、詳細を説明する。
+
+  .. figure:: ./img/ch4_fig18.png
+    :alt: Figure18: Illustration of Power Up and Power Down Sequence
 
 
 Multiple Supply Voltage
