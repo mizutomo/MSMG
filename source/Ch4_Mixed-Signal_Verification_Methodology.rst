@@ -1657,9 +1657,9 @@ Power Shut Off
 Multiple Supply Voltage
 --------------------------------------------------
 
-* Assigning different power domains with different supply voltages is a common technique to achieve trade-off between power consumption and powerformance requirements.
+* 低消費電力化と性能のトレードオフを満たすために、回路を複数のPower Domainに分けて、複数の電源供給を行うのは、一般的な手法である。
 
-* There are three power domains in the example in Figure 19, each at a different voltage level(PD1 at 0.8V, PD2, at 1.2V and PD3 at 1.8V). Note the presense of level shifters between the power domains so that signals can pass from one domain to another across different voltage levels.
+* 図19に3つのPower Domain(PD1に0.8V, PD2に1.2V, PD3に1.8V)を持った例を示す。あるPower Domainから別のPower Domainに信号を渡すために、Power Domainの間にレベルシフタが挿入されていることに注意しなさい。
 
   .. figure:: ./img/ch4_fig19.png
     :alt: Figure19: Schematic Diagram of Multiple Power Domains
@@ -1668,16 +1668,17 @@ Multiple Supply Voltage
 Low Power in Mixed-Signal
 --------------------------------------------------
 
-* A mixed-signal design integrates both analog and digital functionality on the same chip. The interaction between an analog and digital sub sysyhtem is central to how a mixed-signal design works. When such interactions is manifested in the form of signals passing across the analog and digital domain boundary, the signal value must be converted and this is achieved by inserting logic-to-electrical and electrical-to-logic connect modules.
+* Mixed-Signalは、同じチップの上に、アナログとデジタルの機能が搭載されたものである。アナログとデジタルのサブシステム間の相互作用により、システムがどのように動作するかが決まる。アナログとデジタルの境界を信号が行き来する場合、信号はLogic2ElectricalとElectrical2Logicのコネクトモジュールにより、変換されなければならない。
 
-* In a power aware mixed-signal simulation, it is common for a block in a discrete domain with power intent specified on the block using CPF to connect to another block belongings to the continous domain. In such a situation, the process of logic to electrical or electrical to logic value conversion must take the power intent aspect into account. It is with this background, that power-aware value conversion aspects and requirements of mixed-signal simulations are introduced are now being implemented by vendors.
+* Mixed-Signalで電力を考慮したシミュレーションを行う場合、CPFを使用したPower Intentを使って、離散ドメインのブロックと連続ドメインのブロックを接続するのが一般的である。この場合、ロジックから電気信号への変換、逆に電気信号からロジックへの変換部のPower Intentを考慮しなければならない。このようなバックグラウンドがあるため、Mixed-Signalシミュレーションにおける電力を考慮した信号の変換モジュールは、EDAベンダによって、実装が行われている。
 
-* In order to explain the role of power-aware value conversion, consider Figure 20.
+* 電力考慮の信号変換の役割を説明するために、図20を示す。
 
   .. figure:: ./img/ch4_fig20.png
     :alt: Figure20: A Mixed-Signal Design with Power Domains
 
-* Digital block dig_A belongs to the power domain named PD1 and is driving an analog block called ana_B which belongs to power domain PD2. This analog block in turn is driving another digital block called dig_C that belongs to power domain PD3. Note also that all the three power domains have two operating voltages - one with 1.8V and the other with 1.2V.
+* この図は、PD1というPower Domainに属するデジタルブロックdig_Aが、PD2というPower Domainにあるアナログブロックana_Bをドライブしている例である。さらに、このアナログブロックは、PD3等Power Domainに属しているdig_Cを順々にドライブしている。そして、3つ全てのPower Domainは、1.8Vと1.2Vの動作電圧を持つ。
+
 
 Logic to Electrical Conversion
 --------------------------------------------------
