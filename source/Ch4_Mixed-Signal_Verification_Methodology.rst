@@ -1683,14 +1683,98 @@ Low Power in Mixed-Signal
 Logic to Electrical Conversion
 --------------------------------------------------
 
+* 図21のL2Eとして示している電力考慮のLogic-Electrical変換モジュールは、ロジック情報を読んで、それにPower Domainの情報を付加した上で、出力に近似的な電気情報を出力する。
+
+  .. figure:: ./img/ch4_fig21.png
+    :alt: Figure21: A Power-Aware Logic to Electrical Conversion Module
+
+* 変換プロセスは以下のとおりである。
+
+  * 変換モジュールに定義されたルールによって、4つのロジックの状態が、対応する電気的な電圧値に変換される。あるMixed-Signalのシミュレータでは、Logic-Electricalコネクトモジュールが自動的に回路に挿入される。このコネクトモジュールは、Verilog-AMSで記述されており、ユーザがカスタマイズすることも可能である。
+
+  * Power Domain PD1のシャットオフを検知し、それによって、電源シャットオフによって生じた不定値(X)と論理的なX状態に違いが生じる。前者の場合、電源シャットオフによって生じた不定値と論理的なXを区別するために、ユーザは、ある固定の電圧値やある範囲の電圧にしたいと思うかもしれない(図21の(1)を参照)。
+
+  * Power DomainのNominal状態を検知すると、電圧値もNominalの状態になる。例えば、図21のPD1 Power DomainがhighのNominal状態になったとすると、Logic-Electricalコネクトモジュールは、PD1の境界まできた1'b1を1.2Vに変換する。
+
+  * L2E変換モジュールへの電源供給は、PD1 Power Domainにつながっている。
+
+  * シミュレータは、変換モジュールへの供給電圧とPD2のNominal Conditionが一致していることを動的にチェックしなければいけない。その際に、もし、違反があれば、ユーザに通知する必要がある。(図21の(4)を参照)
+
+* 図22にパワーを考慮したLogic-Electrical変換プロセスの図を示す。この例では、1.8V系から3.3V系にパワーの状態が遷移した後に、シャットオフに移る。
+
+  .. figure:: ./img/ch4_fig22.png
+    :alt: Figure22: Power-aware Logic to Electrical Conversion
+
 
 Electrical to Logic Conversion
 --------------------------------------------------
+
+* 電力考慮のElectric-Logic変換モジュールが必要となる基本的な前提は、アナログインスタンスがあるためである。アナログのビヘイビアは、連続ドメインで表現されて、更にPower Domainを切り替えることもできる。これは、ユーザが、PD1のPower Domainにあるブロックを高精度化や性能を正確に測定するために、デジタルブロックからアナログブロックに置き換える際に、最も一般的に見られる。このようなブロックからの出力は、PD2 Power Dmoainにあるデジタルのインスタンスをドライブし、ブロックがアナログだろうとデジタルで実装されていようと関係なく、デジタルブロックへの入力の振る舞いは、矛盾がないことが、期待されることである。
+
+.. * The fundamental premise behind the need for a power-aware electrical to logic conversion is the fact that an analog instance, whose behavior is expressed and simulated in the continuous domain, can also reside in as switchable power domain. This is most commonly seen when the user decides to switch the abstraction of a block, residing in a power domain PD1, from a digital model to an analog one, for reasons such as higher accuracy or measurement of performance characteristics. If the output from such a block is driving a digital instance residing in a power domain PD2, then the expectation is that the behavior of the input to the digital block would be consistent regardless of whether the block was implemented in analog or digital.
+
+  .. figure:: ./img/ch4_fig23.png
+    :alt: Figure23: Power Aware Eletrical to Logic Conversion
+
+* パワー考慮のElectric-Logicの変換を行うために必要な要素を以下に示す。
+
+.. * The following factors need to noted when performing an electrical to logic value conversion in power-aware fashion.
+
+  * 変換モジュールの供給電源は、デジタルインスタンスのPower Domainと接続される。(図23の(1)を参照)
+..  * The supply voltage of the conversion module must be linked with the working voltage of the power domain the digital instance resides in.(Refer to (1) in Figure 23)
+
+  * PD1がシャットオフしているとき、ロジックの出力は、Xとなる。(図23の(2)を参照)
+..  * The logic output will go to an X state when PD1 is in shut-off.(Refer to (2) in)
+
+  * 受け側のデジタルの入力には、アイソレーションセルが挿入されなければならない。これは、オフ領域にある不定値Xがオンドメインに伝搬しないようにするためである。(図23の(3)を参照)
+..  * An isolation device need to be placed at the input of the digital receiver in order to prevent propagation of unknown values from the off domain to the on domain.(Refer to (3) in Figure 23)
+
+  * ドライバとレシーバのPower Domainが異なるNominal電圧で動作している場合、Errorとして扱われなければならない。そして、Power Intentの仕様が、電気的に矛盾がないかどうかチェックされなければならない。
+
+..  * If the driving and receiving power domains have different nominal voltage conditions, it must be treated as an error condition and the power intent specification must be checked as this would otherwise result in electrically inconsistent behavior.(Refer to (4) in Figure 23)
+
+* ここで述べたLogic-ElectricalとElectrical-Logicの変換技術は、LogicとElectricalの双方向接続にも適用できる。この場合、変換モジュールは、入力・出力がドライバにもレシーバにもなることができる。
+
+.. * The techniques adopted for logic to electrical and electrical to logic conversion described here also apply to bi-directional logic and electrical conversion where both input and output of the conversion module can act either as a driver or receiver.
 
 
 Controlloing Analog Power Supply with Low-Power Specification
 -----------------------------------------------------------------
 
+* Mixed-Signalの検証で、モジュールの表現をデジタルからアナログに変えたり、その逆に変更したり、ということは、一般的なことである。Mixed-Signalのシミュレーションを実行するために、アナログの電圧源が電源供給源として使用される。Mixed-Signalのブロックの一部がCPFなどのパワー考慮に設計されている場合、電圧源は機能の一部となる。機能検証の場合でも、アナログブロックに対しての電源供給は、システム全体のPower Intentと矛盾がないものでなければならない。
+
+.. * It is quite common in mixed-signal verification to switch the reqresentation of a module from digital to analog or vice versa. To run such mixed-signal simulation, typically an analog voltage source for the power supply will be provided. In cases where part of the mixed-signal system is designed with power awareness specified using, say, CPF, the voltage source becomes a part of design function. The power supply to analog blocks, even for a functional verification, needs to be defined in a way consistent with the system-wide power intent.
+
+* システムレベルの電源供給設計では、デジタル制御信号やPower Intentの仕様で定義された振るまいにより、Power Intetが記述されることは、一般的なことである。あるブロックの記述をアナログの表現に変えた場合、電源供給設計において、SPICEや機能モデルで、デジタル制御信号や電源仕様(これは、CPFなどのPower Intent仕様によって記述される)の効果を矛盾なく表現するのは、非常にチャレンジングである。これは、SPICEや機能モデルでは、電源仕様が再利用できないからである。さらに、電源仕様のどんな変更もアナログ電源供給モジュールの変更をもたらすことになる。これは、コストや時間だけでなく、検知の難しい設計上のエラーも作りこむ可能性がある。
+
+.. * It is common for system-level power architecture to describe the power intent of the chip by digital control signals and the behaviors defined using a power intent specification format. When some of the blocks in the design are switched to their analog reporesentations, it becomes very challenging for the power architects to consistently represent the effect of the digital control signals and/or power specification (that were described using a power intent specification format such as CPF) in the SPICE or behavioral model, since the power intent specification is no longer reusable. In addition, any change in the power intent specification would result in a change in the implementation of the analog power supply module, which not only is a costly and time consuming endeavor, but also creates possibilities of design errors going undetected.
+
+* この問題を解決する方法は、デジタルモデルからアナログモデルに切り替えるときに、ユーザがブロックに電源とグラウンドの接続を明示的に示すことである。このような電源とグラウンド端子は、ビヘイビアモデルにされるか、Verilog-AMSのようなMixed-Signalビヘイビアモデリング言語を使用して、定義された電源仕様から生成される(この場合、仮想的な電源、グラウンドポートとして振る舞う)。あるブロックがデジタルコンポーネントとしてモデリングされていた場合、電源やグラウンドの仕様は、検証ツールによって無視され、これまでのCPFによって記述された電源仕様が使用される。
+
+.. * A way to address this challenge is for the user to explicitly specify the power and ground connections to the block whose abstraction is being switched from a digital model to an analog one. These power and ground connection can then be used to connect a behavioral model, synthesized from the CPF power intent specification using a mixed-signal behavioral modeling language such as Verilog-AMS, that can act as a virtual power-supply and ground model. When the given block is represented as a digital component, the power and ground specifications are ignored by the verification tools and traditional power domain speficifcations expressed using common power intent specification language are used.
+
+  .. figure:: ./img/ch4_fig24.png
+    :alt: Figure24: Controlling Voltage Supply with Common Power Format (CPF) Specification
+
+* 図24では、デジタルブロックdig_A, dig_Cは、Verilogで記述され、電源仕様はCPFで記述されている。アナログブロックana_Bも低電力の特徴を持っており、電源仕様はデジタルブロックと同じ仕様で記述されているものとする。ana_BブロックがSPICEネットリストや回路図で記述されている場合に、ユーザが電源、グラウンド接続を与える場合のコード例を以下に示す。機能検証ツールは、ana_Bの電源仕様に従って、電源モデルを生成し、ana_Bに仮想的な電源の接続を作る。そして、デジタルブロクと同じ言語を使用して、アナログブロックでも電源仕様の効果をシミュレーションする。
+
+.. * In Figure 24, the digital blocks, dig_A and dig_C, are represented in Verilog, and their power behavior is defined using CPF. Assume that the analog block ana_B also has some low-power characteristics and that the power behavior is expressed in the same format as the digital blocks. The code snippet below shows how the user specifies a power and ground connection for the ana_B block that would be used when ana_B is represented as an analog component, possibly as an SPICE netlist or a schematic. The functional verification tool can synthesize a power supply model in accordance with the power domain specification of the block ana_B and the make a virtual connection of the power supply model to the power connection of ana_B and thereby simulate the effet of power domain specification - using the same language that is being used for pure digital blocks elsewhere in the design - on the analog blocks.
+
+* CPFにおけるPower/Groundピンの定義
+
+.. * Specification for Power and Ground Pins in CPF.
+
+  ::
+    # Power Domain
+    create_power_domain -name PD2 -instances {ana_B} -shutoff_condition pso1
+
+    # Specify global power supply and ground
+    update_power_domain -name PD2 \
+      -primary_power_net vdd -primary gound_net gnd
+
+* ana_Bブロックは、PD2のPower Domainに属している。ana_BがVDD/GND端子を持ったSPICEのようなアナログ記述になった場合、機能検証プロセスは、アナログブロックana_BがパワードメインPD2にあるものとして、同じように電源の供給を行い、検証を続ける。
+
+.. * The block ana_B belongs to a power domain PD2. When ana_B is changed to an analog representation, such as a SPICE sub-circuit with power supply port vdd and ground port gnd, the functional verification process will continue to work applying the same power supply characteristics as laid out in the specification of power domain PD2 to the analog block ana_B.
 
 Changes in Low-Power Verification in Mixed-Signal
 ==================================================
