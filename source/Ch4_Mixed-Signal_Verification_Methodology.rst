@@ -1798,14 +1798,20 @@ Multiple Drivers and Nominal Voltage Related Conflicts
 
 * 図27では、"out"は、IPブロック"ana_A"の出力ポートである。このポートは、Power Domain "pd_out"の境界のポートとして定義されている。
 
-* To Verify whether this specification is consistent with the actual output voltage from an analog simulation, the boundary port information must be read from the CPF specification and the analog output voltage on the node that is visible to the SPICE simulator. For the power specification to be correct, these voltage values must agree within a reasonable tolerance.
+* この仕様が、アナログシミュレーションの結果から求まる実際の出力電圧と、一致しているか検証するために、CPF仕様から読まれる境界のポート情報と、SPICEシミュレータが計算する出力する電圧値を比較しなければならない。これらの値が、ある一定の許容値以内であれば、電源仕様が正しいことが言える。
 
-* Once these values are read, a mixed-signal assertion statement can be written to ensure that the condition is always met at the rising edge of clock, or else an error is raised. The control flow of this process is depicted in Figure 28.
+.. * To Verify whether this specification is consistent with the actual output voltage from an analog simulation, the boundary port information must be read from the CPF specification and the analog output voltage on the node that is visible to the SPICE simulator. For the power specification to be correct, these voltage values must agree within a reasonable tolerance.
+
+* 一度、これらの値が読まれると、クロックの立ち上がりの際に、Mixed-Signalのアサーションが評価され、条件を満たしている場合は、値が書き込まれ、Failしている場合は、Errorを発生する。このプロセスの制御フローを図28に示す。
+
+.. * Once these values are read, a mixed-signal assertion statement can be written to ensure that the condition is always met at the rising edge of clock, or else an error is raised. The control flow of this process is depicted in Figure 28.
 
   .. figure:: ./img/ch4_fig28.png
     :alt: Figure28: Use Power Aware Modeling with Assertion to verify Low-Power IP
 
-* This methodology illustrates how it is possible to use mixed-signal verification techniques to perform low-power IP verification that involves both analog and digital sub-systems.
+* この図では、どのようにして、Mixed-Signalの検証がアナログとデジタルを含んだ低電力IPの検証に使うことができるかかを示している。
+
+.. * This methodology illustrates how it is possible to use mixed-signal verification techniques to perform low-power IP verification that involves both analog and digital sub-systems.
 
 
 Example
