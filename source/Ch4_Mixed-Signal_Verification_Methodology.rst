@@ -1776,15 +1776,59 @@ Controlloing Analog Power Supply with Low-Power Specification
 
 .. * The block ana_B belongs to a power domain PD2. When ana_B is changed to an analog representation, such as a SPICE sub-circuit with power supply port vdd and ground port gnd, the functional verification process will continue to work applying the same power supply characteristics as laid out in the specification of power domain PD2 to the analog block ana_B.
 
+
 Changes in Low-Power Verification in Mixed-Signal
 ==================================================
 
 Reference Voltage Selection for Power-Aware Electrical to Logic Conversion
 ------------------------------------------------------------------------------
 
-
 Multiple Drivers and Nominal Voltage Related Conflicts
 ----------------------------------------------------------
 
+* 複数のデジタルのドライバが、一つのアナログのレシーバに繋がっているとき、リファレンス電源の整合性について検討する必要がある。この整合性は、デジタルブロック間だけでなく、デジタルブロックが属するPower Domain間やアナログレシーバ側のPower Domainについても考慮しなければならない。もし、デジタルドライバ間で、異なるNominal電圧で動いている場合、Logic-Electric変換モジュールのリファレンス電圧は、曖昧なものとなってしまう。原則的には、このような矛盾が生じた場合、検証ツールがユーザに知らせなければならない。同様に、もしドライブする側のPower Domain(デジタルでもアナログでも)が、レシーバ側のPower Domainと異なる場合、Electrical-Logic変換や、Logic-Electical変換プロセスのリファレンス電圧は曖昧なものとなってしまう。検証ツールは、このような整合性のチェックを動的に行い、2つのNominal電圧に矛盾が生じている場合は、ユーザに通知なければないない。これを図示すると、図26になる。
+
+  .. figure:: ./img/ch4_fig26.png
+    :alt: Figure26: Multiple Drivers and Differing Nominal Voltage Conflict
+
+* 回路シミュレータの立場では、電源の仕様はトランジスタレベルのネットリストに既に組み込まれており、デザインの設計仕様はクリアである。しかしながら、このブロックをデジタル検証ツールで検証する場合、CPFのマクロパワーモデルを作成する必要がある。抽象度の高いモデルにおいて、ブロックの境界でパワー特性がSPICEと同じように表現できるかが、検証エンジニアの課題である。以下で、機能検証の際に整合性のあるモデル作成するための概要を述べる。
+
+  .. figure:: ./img/ch4_fig27.png
+    :alt: Figure27: Low-Power IP Verification Problem
+
+* 図27では、"out"は、IPブロック"ana_A"の出力ポートである。このポートは、Power Domain "pd_out"の境界のポートとして定義されている。
+
+* To Verify whether this specification is consistent with the actual output voltage from an analog simulation, the boundary port information must be read from the CPF specification and the analog output voltage on the node that is visible to the SPICE simulator. For the power specification to be correct, these voltage values must agree within a reasonable tolerance.
+
+* Once these values are read, a mixed-signal assertion statement can be written to ensure that the condition is always met at the rising edge of clock, or else an error is raised. The control flow of this process is depicted in Figure 28.
+
+  .. figure:: ./img/ch4_fig28.png
+    :alt: Figure28: Use Power Aware Modeling with Assertion to verify Low-Power IP
+
+* This methodology illustrates how it is possible to use mixed-signal verification techniques to perform low-power IP verification that involves both analog and digital sub-systems.
+
+
 Example
 ^^^^^^^^^^^
+
+* An example of mixed-signal design with low-power intent is shown in Figure 29. This circuit contains two power supplies at 1.8V and 2.5V. The design is a sawtooth waveform generator with digital noise. The "zigzag_pd" domain consists of an 8-bit register and a counter, whose outputs are combined together to generate a count-up number, "mult_a". The "factor_pd" domain consists of a 3-to-8 decoder, the result of which is added to a const number to generate a noise factor, signal "mult_b". Signal "mult_a" is multiplied with noise factor "mult_b", and the result "mult_out" is sent to a DAC. The DAC converts the digital count-up number with noise to the analog sawtooth waveform "dac_out".
+
+  .. figure:: ./img/ch4_fig29.png
+    :alt: Figure29: Mixed-Signal Design with Low-Power Intent
+
+* The design is first run in digital mode. Figure 30 shows the simulation results and these are verified to be accurate.
+
+  .. figure:: ./img/ch4_fig30.png
+    :alt: Figure30: Digital Low-Power Simulation Waveform
+
+* Next the SPICE models for the decoder and multiplier blocks are used but no mixed-signal low-power techniques are enabled. Figure 31 shows the waveforms for some key signals. The first and second signals are incorrect, because the intent to turn off power domain "factor_pd" did not work as expected in the SPICE version, and the isolation function is not present in the connection from "zigzag_pd" to _multiplier".
+
+  .. figure:: ./img/ch4_fig31.png
+    :alt: Figure31: AMS SImulation Waveform Without using Low Power
+
+* The same configuration is rerun, but all low-power verification techniques are enabled as discussed in this chapter. The results are show in Figure 32. All low-power intents are now correctly satisfied. Note that using this methodology it is no longer necessary to add any voltage source or power supply to the top level.
+
+  .. figure:: ./img/ch4_fig32.png
+    :alt: Figure32: AMS Simulation Waveform Using Low Power
+
+
