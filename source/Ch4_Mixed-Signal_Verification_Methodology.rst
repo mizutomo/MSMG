@@ -1827,22 +1827,30 @@ Multiple Drivers and Nominal Voltage Related Conflicts
 Example
 ^^^^^^^^^^^
 
-* An example of mixed-signal design with low-power intent is shown in Figure 29. This circuit contains two power supplies at 1.8V and 2.5V. The design is a sawtooth waveform generator with digital noise. The "zigzag_pd" domain consists of an 8-bit register and a counter, whose outputs are combined together to generate a count-up number, "mult_a". The "factor_pd" domain consists of a 3-to-8 decoder, the result of which is added to a const number to generate a noise factor, signal "mult_b". Signal "mult_a" is multiplied with noise factor "mult_b", and the result "mult_out" is sent to a DAC. The DAC converts the digital count-up number with noise to the analog sawtooth waveform "dac_out".
+* 図29に低電力設計を行ったMixed-Signalの例を示す。この回路は、1.8Vと2.5Vの2系統の電源供給がある。また、この回路は、デジタルのノイズが重畳したのこぎり型の波形を生成するものである。"zigzag_pd"のPower Domainには、8ビットのレジスタとカウンタがあり、この2つの信号が組み合わされて、カウントアップする"mult_a"信号を生成している。"factor_pd"のPower Domainは、3入力8出力のデコーダと定数を組み合わせて、ノイズ信号"mult_b"を生成する回路である。信号"mult_a"と"mult_b"が加算されて、"mult_out"信号が生成される。この信号は、DACへと送られる。DACは、ノイズ込みのデジタルカウンタ信号をアナログののこぎり波形"dac_out"に変換している。
+
+.. * An example of mixed-signal design with low-power intent is shown in Figure 29. This circuit contains two power supplies at 1.8V and 2.5V. The design is a sawtooth waveform generator with digital noise. The "zigzag_pd" domain consists of an 8-bit register and a counter, whose outputs are combined together to generate a count-up number, "mult_a". The "factor_pd" domain consists of a 3-to-8 decoder, the result of which is added to a const number to generate a noise factor, signal "mult_b". Signal "mult_a" is multiplied with noise factor "mult_b", and the result "mult_out" is sent to a DAC. The DAC converts the digital count-up number with noise to the analog sawtooth waveform "dac_out".
 
   .. figure:: ./img/ch4_fig29.png
     :alt: Figure29: Mixed-Signal Design with Low-Power Intent
 
-* The design is first run in digital mode. Figure 30 shows the simulation results and these are verified to be accurate.
+* この回路は、最初にデジタルモードでシミュレーションを行い、正しく検証できていることを確認できた。シミュレーション結果を図30に示す。
+
+.. * The design is first run in digital mode. Figure 30 shows the simulation results and these are verified to be accurate.
 
   .. figure:: ./img/ch4_fig30.png
     :alt: Figure30: Digital Low-Power Simulation Waveform
 
-* Next the SPICE models for the decoder and multiplier blocks are used but no mixed-signal low-power techniques are enabled. Figure 31 shows the waveforms for some key signals. The first and second signals are incorrect, because the intent to turn off power domain "factor_pd" did not work as expected in the SPICE version, and the isolation function is not present in the connection from "zigzag_pd" to _multiplier".
+* 次に、デコーダとマルチプライヤのブロックにSPICEモデルを適用した。この時、Mixed-Signalの低電力技術は適用しなかった。図31に波形を示す。1番目と2番目の信号は正しくない。これは、factor_pdのPower Domainに設定した電源シャットオフがSPICEでは動作しなかったからである。また、"zigzag_pd"と"multiplier"の間のアイソレーションの機能も存在していない。
+
+.. * Next the SPICE models for the decoder and multiplier blocks are used but no mixed-signal low-power techniques are enabled. Figure 31 shows the waveforms for some key signals. The first and second signals are incorrect, because the intent to turn off power domain "factor_pd" did not work as expected in the SPICE version, and the isolation function is not present in the connection from "zigzag_pd" to _multiplier".
 
   .. figure:: ./img/ch4_fig31.png
     :alt: Figure31: AMS SImulation Waveform Without using Low Power
 
-* The same configuration is rerun, but all low-power verification techniques are enabled as discussed in this chapter. The results are show in Figure 32. All low-power intents are now correctly satisfied. Note that using this methodology it is no longer necessary to add any voltage source or power supply to the top level.
+* 最後に、本チャプターで説明した低電力技術を適用した時の結果を図32に示す。全ての低電力設定が正しく動作している。この手法を使うことで、トップレベルのテストベンチに対して、電圧源や電源供給源も設定する必要がないことが確認できる。
+
+.. * The same configuration is rerun, but all low-power verification techniques are enabled as discussed in this chapter. The results are show in Figure 32. All low-power intents are now correctly satisfied. Note that using this methodology it is no longer necessary to add any voltage source or power supply to the top level.
 
   .. figure:: ./img/ch4_fig32.png
     :alt: Figure32: AMS Simulation Waveform Using Low Power
