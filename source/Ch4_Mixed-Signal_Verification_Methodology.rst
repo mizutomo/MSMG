@@ -1779,8 +1779,17 @@ Controlloing Analog Power Supply with Low-Power Specification
 Changes in Low-Power Verification in Mixed-Signal
 ==================================================
 
+* このセクションでは、Mixed-Signalのシステムで低電力の検証を行うための課題を説明する。
+
 Reference Voltage Selection for Power-Aware Electrical to Logic Conversion
 ------------------------------------------------------------------------------
+
+* Electrical-Logic変換モジュールのリファレンス電圧によっては、意図しない結果が得られることがある。図25の例を考えなさい。この例では、アナログブロックana_Aは1.2Vで動作しているとする。もし、このアナログブロックから、ロジック1を出力し、Electrical-Logic変換モジュールを通したとする。この場合、3.3Vになって欲しいが、誤った電圧値になることがある。
+
+  .. figure:: ./img/ch4_fig25.png
+    :alt: Figure25: Reference Voltage Selection for Power Aware Electrical to Logic Conversion
+
+* この場合、アナログブロックana_Aが属しているPower Domainの動作状態によって、Electrical-Logic変換モジュールのリファレンス電源が決まってしまう。
 
 
 Multiple Drivers and Nominal Voltage Related Conflicts
