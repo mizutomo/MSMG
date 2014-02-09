@@ -433,8 +433,8 @@ Assertion-Based Verification
 
   * デザインがその入力に対して正しく応答している。（例えば、図1の左から2,4番目のAssertion)
 
-    .. image:: ./img/AssersionInputImage.png
-       :alt: Figure 1. Device under Test(DUT) with Embedded Assetions
+.. image:: ./img/AssersionInputImage.png
+   :alt: Figure 1. Device under Test(DUT) with Embedded Assetions
 
 
 
@@ -844,8 +844,8 @@ Simulation Results
     "limit_cycle_p2","0","2"
     "no_long_one_seq","14","2"
 
-  .. image:: ./img/waveforms_for_loopStabilityProperty.png
-     :alt: Figure 5: Waveforms for Loop Stability Property
+.. image:: ./img/waveforms_for_loopStabilityProperty.png
+   :alt: Figure 5: Waveforms for Loop Stability Property
 
 
 
@@ -879,8 +879,8 @@ Coverage Measurements
   検証とのギャップが現れてきている。ITRS( http://www.itrs.net/ )の図6が示すように、
   検証生産性が設計生産性を引っ張り、今度は製造能力を引っ張る。
 
-  .. image:: ./img/ch4_fig6.png
-    :alt: Figure6: ITRS Productivity Gap Chart
+.. image:: ./img/ch4_fig6.png
+  :alt: Figure6: ITRS Productivity Gap Chart
 
 
 * プロジェクトの任意の時に、プロジェクトの検証サイクルの正確な進行状況を述べること、
@@ -1105,8 +1105,8 @@ Coverage to Test Plan Mapping
 * メトリクスドリブン検証計画ツールは、図7に示すように、検証計画から計画されたカバレッジに
   マッピングされたテストベンチからのカバレッジ測定を可能にする。
 
-  .. image:: ./img/ch4_fig7.png
-    :alt: Figure7: Mapping implemented Coverage to Planned Coverage
+.. image:: ./img/ch4_fig7.png
+  :alt: Figure7: Mapping implemented Coverage to Planned Coverage
 
 
 Mixed-Signal Metric-Driven Verification
@@ -1135,8 +1135,8 @@ Mixed-Signal Metric-Driven Verification
 
 * 図8にIPレベル、SoCレベルの両方にまたがる検証イメージを示す。IPレベルで検証プランとアナログ回路のモデルが作成され、テスト環境に置かれる。UVM-MSは、AMSモデルやSPICEネットリストに対しても適用することができるが、最も良い検証環境を実現するために、アナログ回路はRNMで構築されるべきであるが、AMSモデルやSPICEネットにも適用することはできる。
 
-  .. figure:: ./img/ch4_fig8.png
-    :alt: Figure 8: Applying UVM-MS at the IP and SoC Level
+.. figure:: ./img/ch4_fig8.png
+  :alt: Figure 8: Applying UVM-MS at the IP and SoC Level
 
 |
 
@@ -1154,8 +1154,8 @@ Mixed-Signal Metric-Driven Verification
 
 |
 
-  .. figure:: ./img/ch4_fig9.png
-    :alt: Figure 9: Verification Flow at the IP Level
+.. figure:: ./img/ch4_fig9.png
+  :alt: Figure 9: Verification Flow at the IP Level
 
 |
 
@@ -1213,8 +1213,8 @@ Constructing a UVM-MS Verification Environment
 
   * しきい値クロスポイントモニタ。 'dms_threshold'は、非常に短い遷移時間の信号(スパイクやグリッチなど)を取り除くことができるプログラマブルな検出器である。
 
-  .. figure:: ./img/ch4_fig10.png
-    :alt: Figure 10: Architecture of a UVM-MS Environment
+.. figure:: ./img/ch4_fig10.png
+  :alt: Figure 10: Architecture of a UVM-MS Environment
 
 
 Collecting Coverage
@@ -1291,8 +1291,8 @@ Comparing Two Values
 
 * アナログ回路におけるタイミングのチェックは、図11のように、双方の信号にとって測定開始点となるトリガイベントが必要となる。もし、入力と出力の間に期待される遅延があるとすると、測定もそれに応じて遅らせる必要がある。測定は期間中ずっと行われ、測定の最後に、それぞのモニタからメソッドポートをに出力される。最後のチェッカコードは、測定工程が終わった時にトリガされる。
 
-  .. figure:: ./img/ch4_fig11.png
-    :alt: Figure11: Timing Analog Checks
+.. figure:: ./img/ch4_fig11.png
+  :alt: Figure11: Timing Analog Checks
 
 Triggering a Check on Control Changes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1306,8 +1306,8 @@ Measuring Signal Timing
 
 * 信号がある形状になるべきだ、というシチュエーションがあったとしよう。例えば、電源起動後に、あるタイミングウィンドウ内で電圧がターゲットとなる電圧領域内にないといけない、という場合である。このようなケースでは、指定したタイミングウィンドウ内で切り出した信号に対して、チェッカを実装する。通常のタイミングチェッカは、初期のイベントにより駆動される。測定のための遅延を作り出すために、信号はある時間の領域だけ測定され、比較が行われる。このような測定値を比較するために、許容誤差が使用される。この例を図12に示す。
 
-  .. figure:: ./img/ch4_fig12.png
-    :alt: Figure12: Checking for Signal Timing. The Checking Window is Bounded by Minimal and Maximal Time and Voltage
+.. figure:: ./img/ch4_fig12.png
+  :alt: Figure12: Checking for Signal Timing. The Checking Window is Bounded by Minimal and Maximal Time and Voltage
 
 Comparing a Value to a Threshold
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1363,8 +1363,8 @@ Power-up and Power-down Sequences
 
 * 全体的にささいなものではないパワーシーケンスは、UVMのコンポーネントであるBFM(シーケンスドライバとシーケンスアイテムのライブラリ)を用いて、ドライブされるべきである。パワーシーケンスチェッカによって定義されたイベント情報を改修することで、パワーアップシーケンスのカバレッジをモニタリングすることができる。
 
-  .. figure:: ./img/ch4_fig13.png
-    :alt: Figure11: A Simple Power-up Spec
+.. figure:: ./img/ch4_fig13.png
+  :alt: Figure11: A Simple Power-up Spec
 
 
 Analog Model Creation and Validation
@@ -1435,8 +1435,8 @@ System-Level Parameters and Timing
 
 * モデルが時間連続的なモデルであったとしても、抽象度の高いテストベンチでは、常に離散的なイベントドリブンの方式により実行される。つまり、アナログ信号はサンプリングされ、離散的なタイムステップの入力が作られる。テストベンチ内の最も高速なクロック信号とローカルクロックから、タイミングの同期化が行われる。サンプリング周波数は、指定したテストに合うように、シミュレーションの開始時にセットされる。
 
-  .. figure:: ./img/ch4_fig14.png
-    :alt: Figure14: Supporting Seveal Model Sytles in a Single Testbench
+.. figure:: ./img/ch4_fig14.png
+  :alt: Figure14: Supporting Seveal Model Sytles in a Single Testbench
 
 * アナログのテストベンチでは、SPICEモデルとAMSモデル、実数モデルを切り替えられないといけない。これは、同じシミュレーション条件を使って、あるモデルと他のモデルを検証するために使用される。
 
@@ -1461,7 +1461,7 @@ Recommended Directory Structure
 
 * どのプロジェクトでも同じコンセンサスが得られるように、ディレクトリ構造は標準なものを使用すべきである。おすすめのディレクトリ構造は、デザインとテストベンチ、および、テストプランとドキュメンテーションを分ける構造である。このような標準的な手法(モジュラリティ)を使用することで、再利用や統合を促すことができる。下記の構造は、標準的なプロジェクトでのディレクトリ構造である。
 
-  .. figure:: ./img/ch4_dir.png
+.. figure:: ./img/ch4_dir.png
 
 
 Closing the Loop between Regression and Plan
@@ -1471,15 +1471,15 @@ Closing the Loop between Regression and Plan
 
 * 図15に示すように、レグレッションテストを実行すると、生のカバレッジデータが取得され、解析することが可能になる。しかし、この大量の紐付けされていないカバレッジデータは、解析するにも、意味のあるように使用するのも困難である。そのため、プランにこの生のカバレッジデータを重ねるのである。これにより、カバレッジデータは、意味のある解析がなされて、関連付けされるのである。
 
-  .. figure:: ./img/ch4_fig15.png
-    :alt: Figure15: Regression Setup using a Regression/Verificaition Management Tool
+.. figure:: ./img/ch4_fig15.png
+  :alt: Figure15: Regression Setup using a Regression/Verificaition Management Tool
 
 * 図15は、典型的なレグレッション/ベリフィケーションマネージメントツールの流れを示したものである。Session Runnerがそれぞれの実行スクリプトを使用して、多数の条件のシミュレーションを実行する。それぞれのシミュレーションは、セッション制御ファイルによって指定されたパラメータセットと共に、自動的に実行される。例えば、アナログIPに対して、入力周波数の範囲をスイープさせて実行することができる。
 
 * シミューレーションセッションの最後に、全ての結果が解析され、カバレッジデータが集計される。収集されたカバレッジデータは、検証プランにマッピングされ、レグレッションマネージメントツールにロードされる。レグレッションテストが完全に行われた場合、検証計画時に作られた検証プランにロードされ、オジリナルの検証プランに基づいてカバレッジが解析される。図16に、アナログカバレッジを収集した例を示す(これは、"Mixed-Signal Verification Planの節で取り上げた可変ゲインアンプ(VGA)の例である)。
 
-  .. figure:: ./img/ch4_fig16.png
-    :alt: Figure16: Analog Coverage in a Verification Plan
+.. figure:: ./img/ch4_fig16.png
+  :alt: Figure16: Analog Coverage in a Verification Plan
 
 
 Updating the SoC-level Test Plan
@@ -1512,8 +1512,8 @@ Interface Consistency for SoC-level Model Switching
 
 * チップレベルでのレグレッションテストの後、検証エンジニアは、カバレッジ・チェック項目・シナリオをチップレベルの検証プランにマッピングし、チェックを行う。
 
-  .. figure:: ./img/ch4_fig17.png
-    :alt: Figure17: Verification at the SoC Level Reusing IP Verificaiton Elements
+.. figure:: ./img/ch4_fig17.png
+  :alt: Figure17: Verification at the SoC Level Reusing IP Verificaiton Elements
 
 Integrating into SoC-level Testbench
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1650,8 +1650,8 @@ Power Shut Off
 
 * Power Shut-Offは、チップの一部だけの電源供給を止める技術である。ブロックの電源供給をシャットダウンするのに先立って、影響を受けるブロックの信号線の接続をアイソレートし、パワーアップシーケンスを最適化するために、順序回路の状態を保存しなければならない。この状態を図18に示す。Mixed-Signalのチップにおいて、パワーアップ/パワーダウンシーケンスの機能検証をする場合、アナログ側において、パワーダウンの状態が正確に反映されるように、デジタルドライバの電圧値が明示されなければならない。これ以降の節で、パワーシャットオフの電圧について、詳細を説明する。
 
-  .. figure:: ./img/ch4_fig18.png
-    :alt: Figure18: Illustration of Power Up and Power Down Sequence
+.. figure:: ./img/ch4_fig18.png
+  :alt: Figure18: Illustration of Power Up and Power Down Sequence
 
 
 Multiple Supply Voltage
@@ -1661,8 +1661,8 @@ Multiple Supply Voltage
 
 * 図19に3つのPower Domain(PD1に0.8V, PD2に1.2V, PD3に1.8V)を持った例を示す。あるPower Domainから別のPower Domainに信号を渡すために、Power Domainの間にレベルシフタが挿入されていることに注意しなさい。
 
-  .. figure:: ./img/ch4_fig19.png
-    :alt: Figure19: Schematic Diagram of Multiple Power Domains
+.. figure:: ./img/ch4_fig19.png
+  :alt: Figure19: Schematic Diagram of Multiple Power Domains
 
 
 Low Power in Mixed-Signal
@@ -1674,8 +1674,8 @@ Low Power in Mixed-Signal
 
 * 電力考慮の信号変換の役割を説明するために、図20を示す。
 
-  .. figure:: ./img/ch4_fig20.png
-    :alt: Figure20: A Mixed-Signal Design with Power Domains
+.. figure:: ./img/ch4_fig20.png
+  :alt: Figure20: A Mixed-Signal Design with Power Domains
 
 * この図は、PD1というPower Domainに属するデジタルブロックdig_Aが、PD2というPower Domainにあるアナログブロックana_Bをドライブしている例である。さらに、このアナログブロックは、PD3等Power Domainに属しているdig_Cを順々にドライブしている。そして、3つ全てのPower Domainは、1.8Vと1.2Vの動作電圧を持つ。
 
@@ -1685,8 +1685,8 @@ Logic to Electrical Conversion
 
 * 図21のL2Eとして示している電力考慮のLogic-Electrical変換モジュールは、ロジック情報を読んで、それにPower Domainの情報を付加した上で、出力に近似的な電気情報を出力する。
 
-  .. figure:: ./img/ch4_fig21.png
-    :alt: Figure21: A Power-Aware Logic to Electrical Conversion Module
+.. figure:: ./img/ch4_fig21.png
+  :alt: Figure21: A Power-Aware Logic to Electrical Conversion Module
 
 * 変換プロセスは以下のとおりである。
 
@@ -1702,8 +1702,8 @@ Logic to Electrical Conversion
 
 * 図22にパワーを考慮したLogic-Electrical変換プロセスの図を示す。この例では、1.8V系から3.3V系にパワーの状態が遷移した後に、シャットオフに移る。
 
-  .. figure:: ./img/ch4_fig22.png
-    :alt: Figure22: Power-aware Logic to Electrical Conversion
+.. figure:: ./img/ch4_fig22.png
+  :alt: Figure22: Power-aware Logic to Electrical Conversion
 
 
 Electrical to Logic Conversion
@@ -1713,8 +1713,8 @@ Electrical to Logic Conversion
 
 .. * The fundamental premise behind the need for a power-aware electrical to logic conversion is the fact that an analog instance, whose behavior is expressed and simulated in the continuous domain, can also reside in as switchable power domain. This is most commonly seen when the user decides to switch the abstraction of a block, residing in a power domain PD1, from a digital model to an analog one, for reasons such as higher accuracy or measurement of performance characteristics. If the output from such a block is driving a digital instance residing in a power domain PD2, then the expectation is that the behavior of the input to the digital block would be consistent regardless of whether the block was implemented in analog or digital.
 
-  .. figure:: ./img/ch4_fig23.png
-    :alt: Figure23: Power Aware Eletrical to Logic Conversion
+.. figure:: ./img/ch4_fig23.png
+  :alt: Figure23: Power Aware Eletrical to Logic Conversion
 
 * パワー考慮のElectric-Logicの変換を行うために必要な要素を以下に示す。
 
@@ -1753,8 +1753,8 @@ Controlloing Analog Power Supply with Low-Power Specification
 
 .. * A way to address this challenge is for the user to explicitly specify the power and ground connections to the block whose abstraction is being switched from a digital model to an analog one. These power and ground connection can then be used to connect a behavioral model, synthesized from the CPF power intent specification using a mixed-signal behavioral modeling language such as Verilog-AMS, that can act as a virtual power-supply and ground model. When the given block is represented as a digital component, the power and ground specifications are ignored by the verification tools and traditional power domain speficifcations expressed using common power intent specification language are used.
 
-  .. figure:: ./img/ch4_fig24.png
-    :alt: Figure24: Controlling Voltage Supply with Common Power Format (CPF) Specification
+.. figure:: ./img/ch4_fig24.png
+  :alt: Figure24: Controlling Voltage Supply with Common Power Format (CPF) Specification
 
 * 図24では、デジタルブロックdig_A, dig_Cは、Verilogで記述され、電源仕様はCPFで記述されている。アナログブロックana_Bも低電力の特徴を持っており、電源仕様はデジタルブロックと同じ仕様で記述されているものとする。ana_BブロックがSPICEネットリストや回路図で記述されている場合に、ユーザが電源、グラウンド接続を与える場合のコード例を以下に示す。機能検証ツールは、ana_Bの電源仕様に従って、電源モデルを生成し、ana_Bに仮想的な電源の接続を作る。そして、デジタルブロクと同じ言語を使用して、アナログブロックでも電源仕様の効果をシミュレーションする。
 
@@ -1787,8 +1787,8 @@ Reference Voltage Selection for Power-Aware Electrical to Logic Conversion
 
 * Electrical-Logic変換モジュールのリファレンス電圧によっては、意図しない結果が得られることがある。図25の例を考えなさい。この例では、アナログブロックana_Aは1.2Vで動作しているとする。もし、このアナログブロックから、ロジック1を出力し、Electrical-Logic変換モジュールを通したとする。この場合、3.3Vになって欲しいが、誤った電圧値になることがある。
 
-  .. figure:: ./img/ch4_fig25.png
-    :alt: Figure25: Reference Voltage Selection for Power Aware Electrical to Logic Conversion
+.. figure:: ./img/ch4_fig25.png
+  :alt: Figure25: Reference Voltage Selection for Power Aware Electrical to Logic Conversion
 
 * この場合、アナログブロックana_Aが属しているPower Domainの動作状態によって、Electrical-Logic変換モジュールのリファレンス電源が決まってしまう。
 
@@ -1798,13 +1798,13 @@ Multiple Drivers and Nominal Voltage Related Conflicts
 
 * 複数のデジタルのドライバが、一つのアナログのレシーバに繋がっているとき、リファレンス電源の整合性について検討する必要がある。この整合性は、デジタルブロック間だけでなく、デジタルブロックが属するPower Domain間やアナログレシーバ側のPower Domainについても考慮しなければならない。もし、デジタルドライバ間で、異なるNominal電圧で動いている場合、Logic-Electric変換モジュールのリファレンス電圧は、曖昧なものとなってしまう。原則的には、このような矛盾が生じた場合、検証ツールがユーザに知らせなければならない。同様に、もしドライブする側のPower Domain(デジタルでもアナログでも)が、レシーバ側のPower Domainと異なる場合、Electrical-Logic変換や、Logic-Electical変換プロセスのリファレンス電圧は曖昧なものとなってしまう。検証ツールは、このような整合性のチェックを動的に行い、2つのNominal電圧に矛盾が生じている場合は、ユーザに通知なければないない。これを図示すると、図26になる。
 
-  .. figure:: ./img/ch4_fig26.png
-    :alt: Figure26: Multiple Drivers and Differing Nominal Voltage Conflict
+.. figure:: ./img/ch4_fig26.png
+  :alt: Figure26: Multiple Drivers and Differing Nominal Voltage Conflict
 
 * 回路シミュレータの立場では、電源の仕様はトランジスタレベルのネットリストに既に組み込まれており、デザインの設計仕様はクリアである。しかしながら、このブロックをデジタル検証ツールで検証する場合、CPFのマクロパワーモデルを作成する必要がある。抽象度の高いモデルにおいて、ブロックの境界でパワー特性がSPICEと同じように表現できるかが、検証エンジニアの課題である。以下で、機能検証の際に整合性のあるモデル作成するための概要を述べる。
 
-  .. figure:: ./img/ch4_fig27.png
-    :alt: Figure27: Low-Power IP Verification Problem
+.. figure:: ./img/ch4_fig27.png
+  :alt: Figure27: Low-Power IP Verification Problem
 
 * 図27では、"out"は、IPブロック"ana_A"の出力ポートである。このポートは、Power Domain "pd_out"の境界のポートとして定義されている。
 
@@ -1816,8 +1816,8 @@ Multiple Drivers and Nominal Voltage Related Conflicts
 
 .. * Once these values are read, a mixed-signal assertion statement can be written to ensure that the condition is always met at the rising edge of clock, or else an error is raised. The control flow of this process is depicted in Figure 28.
 
-  .. figure:: ./img/ch4_fig28.png
-    :alt: Figure28: Use Power Aware Modeling with Assertion to verify Low-Power IP
+.. figure:: ./img/ch4_fig28.png
+  :alt: Figure28: Use Power Aware Modeling with Assertion to verify Low-Power IP
 
 * この図では、どのようにして、Mixed-Signalの検証がアナログとデジタルを含んだ低電力IPの検証に使うことができるかかを示している。
 
@@ -1831,28 +1831,28 @@ Example
 
 .. * An example of mixed-signal design with low-power intent is shown in Figure 29. This circuit contains two power supplies at 1.8V and 2.5V. The design is a sawtooth waveform generator with digital noise. The "zigzag_pd" domain consists of an 8-bit register and a counter, whose outputs are combined together to generate a count-up number, "mult_a". The "factor_pd" domain consists of a 3-to-8 decoder, the result of which is added to a const number to generate a noise factor, signal "mult_b". Signal "mult_a" is multiplied with noise factor "mult_b", and the result "mult_out" is sent to a DAC. The DAC converts the digital count-up number with noise to the analog sawtooth waveform "dac_out".
 
-  .. figure:: ./img/ch4_fig29.png
-    :alt: Figure29: Mixed-Signal Design with Low-Power Intent
+.. figure:: ./img/ch4_fig29.png
+  :alt: Figure29: Mixed-Signal Design with Low-Power Intent
 
 * この回路は、最初にデジタルモードでシミュレーションを行い、正しく検証できていることを確認できた。シミュレーション結果を図30に示す。
 
 .. * The design is first run in digital mode. Figure 30 shows the simulation results and these are verified to be accurate.
 
-  .. figure:: ./img/ch4_fig30.png
-    :alt: Figure30: Digital Low-Power Simulation Waveform
+.. figure:: ./img/ch4_fig30.png
+  :alt: Figure30: Digital Low-Power Simulation Waveform
 
 * 次に、デコーダとマルチプライヤのブロックにSPICEモデルを適用した。この時、Mixed-Signalの低電力技術は適用しなかった。図31に波形を示す。1番目と2番目の信号は正しくない。これは、factor_pdのPower Domainに設定した電源シャットオフがSPICEでは動作しなかったからである。また、"zigzag_pd"と"multiplier"の間のアイソレーションの機能も存在していない。
 
 .. * Next the SPICE models for the decoder and multiplier blocks are used but no mixed-signal low-power techniques are enabled. Figure 31 shows the waveforms for some key signals. The first and second signals are incorrect, because the intent to turn off power domain "factor_pd" did not work as expected in the SPICE version, and the isolation function is not present in the connection from "zigzag_pd" to _multiplier".
 
-  .. figure:: ./img/ch4_fig31.png
-    :alt: Figure31: AMS SImulation Waveform Without using Low Power
+.. figure:: ./img/ch4_fig31.png
+  :alt: Figure31: AMS SImulation Waveform Without using Low Power
 
 * 最後に、本チャプターで説明した低電力技術を適用した時の結果を図32に示す。全ての低電力設定が正しく動作している。この手法を使うことで、トップレベルのテストベンチに対して、電圧源や電源供給源も設定する必要がないことが確認できる。
 
 .. * The same configuration is rerun, but all low-power verification techniques are enabled as discussed in this chapter. The results are show in Figure 32. All low-power intents are now correctly satisfied. Note that using this methodology it is no longer necessary to add any voltage source or power supply to the top level.
 
-  .. figure:: ./img/ch4_fig32.png
-    :alt: Figure32: AMS Simulation Waveform Using Low Power
+.. figure:: ./img/ch4_fig32.png
+  :alt: Figure32: AMS Simulation Waveform Using Low Power
 
 
