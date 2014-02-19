@@ -47,6 +47,15 @@ Analysis of PLLs
 A Continuous-Time Phase-Domain Approximation for Frequency Domain Analysis
 ------------------------------------------------------------------------------------
 
+.. The phase-domain approach presented here is similar to the one provided by Gardner[4]. The PLL shown in Figure 2 is analyzed. A brief discussion of each of the blocks in the figure is provided. A basic assumption for this analysis is that the PLL is locked. The analysis takes place in the frequency domain, so the Laplace variable s is used in the expressions.
+
+.. The PFD computes the difference in phase between the two input signals. In this model, a chargepump is used to convert the phase difference to a current. There may be a gain associated with the Kdot as shown in Figure 2, but for this analysis, it is assumed to be 1.
+
+.. The loop filter has a transfer function H (s). A common loop filler used in charge-pump PLLs is shown in Figure 3 along with an expression for H(s).
+
+.. figure:: ./img/ch4_fig3.png
+  :alt: Figure3: A Two Pole Loop Filter for a Charge-Pump PLL
+
 Discrete-Time Phase-Domain Models for Frequency-Domain Analysis
 ------------------------------------------------------------------------------------
 
