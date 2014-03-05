@@ -20,7 +20,7 @@ Introduction
 
 .. Figure 1 shows two examples of a voltage follower and an inverting gain stage. Both can be analyzed using voltage variables in the frequency domain. The transfer function for the voltage follower is easily derived by inspection. The non-inverting amplifier follows by applying Kirchhoff's current law after assuming the voltages at the two op-amp inputs are equal. PLLs are often analyzed using phase as the analysis variable, leading to a phase-domain model. Figure 2 illustrates a basic phase-domain model of a PLL, with the output feedback and the forward gain path shown. In this configuration, the PLL is like a unity gain buffer
 
-.. figure:: ./img/ch4_fig2.png
+.. figure:: ./img/ch6_fig2.png
   :alt: Figure2: Block Diagram of a PLL
 
 * 2つの信号の位相差が0であれば、周波数も同じになる。すなわち、位相がロックされると、通常、周波数もロックされる。この位相と周波数のロック現象により、基本のループ回路から、たくさんのPLLと回路を作ることができる。オペアンプのように、PLLもICの中でクリティカルなところに使用される。デジタルチップでは、クロック生成やクロックデスキュー用に使用される。また、通信用チップでは、PLLは周波数シンセサイザ[1]やクロックデータリカバリ回路[2]に用いられる。他には、AD変換器の中で使用されたり、信号の復調や、フィルタリング、モータの速度制御に使用される[3]。
@@ -39,7 +39,7 @@ Introduction
 Analysis of PLLs
 ====================
 
-* PLLの計算方法について、簡単に説明する。まず、最初の節では、位相ドメインでの解析方法について述べる。2番めのセクションでは、改良した位相ドメインのモデルについて述べる。位相ドメインのモデルは、周波数解析にしか使用できないため、3つ目のセクションで時間領域で解く方法について述べる。
+* PLLの計算方法について、簡単に説明する。まず、最初の節では、位相ドメインでの解析方法について述べる。2番目のセクションでは、改良した位相ドメインのモデルについて述べる。位相ドメインのモデルは、周波数解析にしか使用できないため、3つ目のセクションで時間領域で解く方法について述べる。
 
 .. A brief synopsis of methods for analyzing PLLs is presented. The first section will illustrate the phase-domain analysis. The second section introduces an improvement to the phase-domain model. The phase-domain model is analyzed with respect to frequency, so the third section will describe PLL analysis with respect to time.
 
@@ -47,20 +47,96 @@ Analysis of PLLs
 A Continuous-Time Phase-Domain Approximation for Frequency Domain Analysis
 ------------------------------------------------------------------------------------
 
+* ここで説明する位相ドメインのアプローチは、Garner[4]が発表した手法に似ている。図2のPLLのモデルの個々のブロックについて、簡単に説明する。まず、解析のために、PLLがロックしている状態を仮定する。また、解析は周波数ドメインで行うため、ラプラス変数sを用いて、式を表現する。
+
 .. The phase-domain approach presented here is similar to the one provided by Gardner[4]. The PLL shown in Figure 2 is analyzed. A brief discussion of each of the blocks in the figure is provided. A basic assumption for this analysis is that the PLL is locked. The analysis takes place in the frequency domain, so the Laplace variable s is used in the expressions.
+
+* PFDブロックは、2つの入力信号の位相差を算出する。その後、(このモデルでは)チャージポンプ回路を用いて、位相差を電流に変換する。この変換ゲインを図2では、Kdetとしているが、ここでは簡単のため、1と仮定する。
 
 .. The PFD computes the difference in phase between the two input signals. In this model, a chargepump is used to convert the phase difference to a current. There may be a gain associated with the Kdot as shown in Figure 2, but for this analysis, it is assumed to be 1.
 
-.. The loop filter has a transfer function H (s). A common loop filler used in charge-pump PLLs is shown in Figure 3 along with an expression for H(s).
+* ループフィルタの伝達関数をH(s)とする。図3にチャージポンプPLLでよく使用されるループフィルタの回路とその伝達関数を示す。
 
-.. figure:: ./img/ch4_fig3.png
+.. The loop filter has a transfer function H(s). A common loop filler used in charge-pump PLLs is shown in Figure 3 along with an expression for H(s).
+
+.. figure:: ./img/ch6_fig3.png
   :alt: Figure3: A Two Pole Loop Filter for a Charge-Pump PLL
+
+* 電圧制御発振器(VCO)は、入力電圧から対応する周波数に変換する。入力電圧と周波数の関係は、下記の式で表現される。
+
+.. The Voltage-Controlled Oscillator (VCO) converts the input voltage to an output frequency, and the relationship between input voltage and output frequency can be represented as:
+
+.. figure:: ./img/ch6_exp1.png
+
+* VcをVCOの制御電圧とし、電圧と周波数の関係が線形であると仮定すると、電圧と位相の関係式は、非常にシンプルなものとなる。
+
+.. The quantity Vc is the control voltage for the oscillator. The mapping from voltage to frequency is assumed to be linear, so a first-order model is simply:
+
+.. figure:: ./img/ch6_exp2.png
+
+* 周波数ドメインでは、下記の式となる。
+
+.. figure:: ./img/ch6_exp3.png
+
+* 図2のVCOの箱の中には、ここで導いた伝達関数を書いている。
+
+.. The transfer function for this equation was shown in Figure 2 within the VCO box.
+
+* 位相ドメインでPLLの伝達関数を用いるために、まずはループをオープンにして、フォワード伝達関数を求める。ループを切るために、位相検出器の2番目の入力を0にする。一度に伝達関数を求めようとすると、巨大なものとなってしまうため、以下のように、いくつかの中間変数を定義する。
+
+.. To derive a transfer function expressing the phase-domain model, the loop is first opened and analyzed to give the forward transfer function. To open the loop, assume that the second phase detector input is zero. The equations in the analysis become large, so several variables are defined in the following equations.
+
+.. figure:: ./img/ch6_exp4.png
+
+* これらの変数を使用することで、VCOの入力信号までの伝達関数は、以下のようになる。
+
+.. Using these quantities, we can find the Laplace transform Vc(s) at the input of the VCO model.
+
+.. figure:: ./img/ch6_exp5.png
+
+* さらに、VCOのゲインを加え、位相の出力と入力の関係に式を直すことで、以下の開ループ特性が求まる。
+
+.. Adding the VCO gain and moving to the output node gives the open loop transfer function:
+
+.. figure:: ./img/ch6_exp6.png
+
+* 開ループ特性は、ループの安定性を解析するのに役に立つ。この特性を用いることで、閉ループ特性は下記のように求まる。
+
+.. The open-loop transfer function is useful for analyzing the stabihty of the loop. Solving this equation for the closed-loop transfer function gives:
+
+.. figure:: ./img/ch6_exp7.png
+
+* このケースでは、閉ループ特性は3次の特性を持っている。そのため、このタイプのPLLを3次のPLLと呼ぶ。閉ループ特性は、伝達特性においてピークを持つかどうかや、帯域を解析するのに役に立つ。これらの解析については、p.196の"Performance Metrics for PLLs"で述べる。
+
+.. The closed-loop transfer function in this case is third-order, so the PLL is third order. The closed loop transfer function is useful for analyzing if there is peaking in the transfer function and for estimating the bandwidth of the PLL. The importance of these issues will be discussed in the Section "Performance Metrics for PLLs' on page 196.
+
+* 位相に着目して伝達関数を求めるやり方の利点は、シンプルである、というものである。位相特性の定式化や周波数ドメインでの解析によって、短時間でのPLLの解析が可能となる。しかしながら、この手法は本質的に線形であることを仮定しているため、小信号解析にして適用できない。
+
+.. The key advantage of the phase transfer function approach is the simplicity. The phase formulation and the frequency domain analysis open the door to rapid design exploration. However, the method inherently uses a linearized approximation, so it really only applies to small-signal analysis.
+
 
 Discrete-Time Phase-Domain Models for Frequency-Domain Analysis
 ------------------------------------------------------------------------------------
 
+* 先ほどの節では、位相検出器は完全な引き算器としてモデル化した。実際の回路では、位相の比較は、離散時間(通常は、クロックエッジ)で行われる。PLLがロックに近い状態にあるとき、位相の更新は、入力信号の速度で起こる。より本質的には、位相検出器は、固定のサンプリングレートで位相の更新を行う。前節で説明した解析は、位相検出の動作レートが、ループの帯域の10倍以上速い時に成り立つものである。この前提が成り立たない場合、誤差が大きくなる。連続時間での解析手法を用いる場合、位相検出器の周波数領域での動作が現れないため、このような現象を防ぐことができない。ループの位相と帯域を表現する式だけが、ガードを作ることができる。
+
+.. In the last section, the assumption was made that the phase detector could be modeled by a pure subtractor. In actual circuits, the phase comparison happens at discrete periods of time, usually between the clock edges, When the PLL is near lock, the phase updates come at the rate given by the input source. In essence, the phase detector operates at a fixed sampling rate to produce updates. The analysis presented in the last section is approximate and works wellif the operating rate of the phase detector is more than ten times the bandwidth of the loop. If this is not the case, significant errors can be introduced. There is no guard for this when using continuous-time analysis as the frequency of operation for the phase detector does not appear in the analysis. Only expressions for phase of the loop and bandwidth of the loop are created.
+
+* 離散時間領域での解析を行うことで、精度を向上させることができる。ロックに近い状態にあり、位相検出器の入力信号の周波数がサンプリングレートだとする。この場合、論文[5],[6]に離散時間でのモデルの作り方が研究されている。サンプリングされたデータを使うため、ループの周波数ドメインの情報を求めるために、Z変換と離散フーリエ変換が使用される。
+
+.. To increase accuracy, a discrete-time analysis can be performed. The loop is assumed to be near lock, and the sampling rate is the frequency of input signals at the phase detector. Techniques for creating a discrete-lime model have been studied in the literature, allowing approximations to be developed [5] 161, Since sampled data is assumed, the z-transforin aird discrete-time Fourier transform are used to obtain frequency-domain information about the loop.
+
+
 Time-Domain Simulation
 ------------------------------------------------------------------------------------
+
+* これまで述べた2つのモデルは、両方共、周波数ドメインで解析を行ったものであった。周波数ドメインの解析の利点は、高速にシミュレーションが行えることである。逆に欠点としては、大信号・非線形の挙動がモデリングされていないことと、PLLのロック現象の時間変動現象をシミュレーションできないことである。時間領域のシミュレーションでも、周波数領域の解析で得ることができる情報と同じものを得ることができる。しかしながら、シミュレーション時間が非常に大きくなる。これは、周波数ドメインのシミュレーションは、固定の周波数刻みでしか解析しないのに対して、過渡解析では、非常にたくさんの時間ポイントで計算しないといけないためである。特に、波形の形状に関心があるときには、細かいタイムステップで解析する必要がある。時間領域のシミュレーションは、SPICEの過渡解析と関係が深いため、好んで使用される。
+
+.. The previous two methods focused on frequency-domain analysis. The advantage of frequency domain methods is fast simulation time. The disadvantages are the lack of modeling for large signal non-linear behavior and the inability to studying time-varying phenomenon such as PLL locking transients. Time-domain simulation can be used to obtain the same information that the previous two methods provide. However, it comes at a significant cost in simulation time Frequency-domain simulation involves evaluation at a fixed number of frequency points, Time domain simulation requires the circuit to be evaluated at many time points, especially if the shape of the waveformis of interest. Time-domain simulation is often favored becauseitis more closely related to the circuit simulator transient analysis of SPICE simulation.
+
+* 典型的には、タイムドメインのモデルは、アナログソルバによって、時間ステップ毎の電圧値が計算される。Verilog-Aのモデルは、アナログソルバによって解析される。対照的に、デジタルモデルはイベントドリブンであり、信号値が変化した時のみ、解が計算される。スイッチトキャパシタの回路では、イベントドリブンのモデルを使用することで、10倍以上の高速化が得られる[7]。PLLは、出力のエッジがイベントにより発生し、位相変化が発生したときのみループが更新されるため、イベントドリブンとしてモデル化できる。この章では、Verilog-AMSを用いてイベントドリブンのPLLモデルを開発する方法を示す。
+
+.. Typical time-domain models make use of an analog solver that solves for voltage values on a timestep driven basis. Verilog-A models make use of the analog solver, In contrast, digital models typically are event-driven, requiring solutions only when signals change, For switched-capacitor circuits, speed-ups in the range of 10X or more can be achieved when using an event-driven model t71, A PLL can be modeled as an event-driven system since the output edges are events and the loop is only updated when the phase detector fires. This chapter shows how to create an event-driven PLL model in Verilog-AMS.
 
 
 Performance Metrics for PLLs

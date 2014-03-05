@@ -13,7 +13,7 @@ Contents:
 
   Ch3_AMS_Behavioral_Modeling
   Ch4_Mixed-Signal_Verification_Methodology
-
+  Ch6_Event-Driven_Time-Domain_Behavioral_Modeling_of_Phase-Locked_Loops.rst
 
 
 Indices and tables
