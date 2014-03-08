@@ -142,14 +142,55 @@ Time-Domain Simulation
 Performance Metrics for PLLs
 ==================================
 
-Acquisition Range and Output Frequency Range
+* PLLのシミュレーションには、非常に大きな時間がかかるために、ビヘイビアモデルが用いられる。また、ビヘイビアモデルを用いることで、what-if解析のために、様々なシナリオでの検証を行うことができる。設計の後期では、設計者は、製造の前に検証したい、という衝動に駆られるが、長時間のシミュレーションは受け入れることができない。このセクションでは、様々なPLLのパラメータについて、定義と議論を行い、シミュレーションやモデリングに関する問題に焦点をあてる。
+
+.. The use of behavioral modeling for PLLs arises because of the excessive time needed for SPICE simulation. Behavioral models also enable the validation of different scenarios in simulations for what-if analyses. At the end of the design cycle, designers are driven to veriy their PLL designs prior to fabrication, and long simulation times become unacceptable. In this section, various PLL parameters are defined and discussed. The problems for simulation and modeling are highlighted.
+
+Acquisition  Range and Output Frequency Range
 ------------------------------------------------------------------------------------
+
+* PLLは、一般的に広帯域と狭帯域のカテゴリに分けることができる。この場合での帯域とは、出力する周波数のことを言う。狭帯域PLLは、出力する周波数の幅が狭い。VCOの設計により、周波数の範囲が決まる。そのため、VCOの設計により、PLLのタイプが決まる。PLLが検出し、追跡できる周波数の範囲によって、PLLが受け入れることができる入力周波数の範囲が決まり、正しく位相をロックできるかどうか決まる。これが、位相検出器とVCOの役割である。この章では、まず、位相をロックするまでの時間を短縮する方法について焦点をあてる。位相周波数検出器は、エラー信号を生成するために、位相と周波数の両方の情報を使用する。そのため、検出が可能なPFDの周波数レンジは、本質的にVCOの周波数レンジと同じになる。
+
+.. PLLs are generally divided into the categories of wide-band and narrow-band. The band in this case refers to the frequency outputs that can be generated. A narrow-band PLL will be able to generate a signal over a small range of frequencies. The design of the VCO basically determines the frequency range, and thus the type of PLL. The acquisition or capture range of a PLL is the range of frequencies applied at the input that will allow the PLL to come to a correct pahse lock. This is a function of the phase detector and the VCO. The focus, in this chapter, is primarily on PLLs that use frequency aids in the phase detector to speed up phase locking. A PFD will use both phase and frequency information when calculating error signals. Because of this, the acquisition range when using a PFD will be essentially the same as the frequency range of the VCO.
 
 PLL Stability
 ------------------------------------------------------------------------------------
 
+* 位相ドメインの解析で得られたオープンループ伝達関数は、PLLの安定性を解析するために使用される。安定性の評価に使用される一つの指標は、位相余裕である。PLLのオープンループの周波数応答をH(jw)とし、ph(H(jw))を位相の特性とすると、位相余裕(PM)は、下記の式で表現できる。
+
+  PM = 180 + ph(H(jw))@(H(jw)=1)
+
+.. The open-loop transfer function from the phase-domain analysis can be used to measure and study PLL stability. One metric used for stability is phase margin. If H(jw) is the open-loop frequency response of the PLL, the ph(H(jw)) is the phase response of H(jw) expressed in degrees, then phase margin PM in degrees is defined as in the equation below.
+
+* 位相余裕は、オープンループゲインが1になる時の位相に180を加えた値で定義される。原則的には、設計者は60度以上の位相余裕を取って設計する。他のフィードバックシステムのように、他の計測方法(例えば、ゲイン余裕)でも安定性を計測することが可能である。オペアンプを用いたフィードバック系では、どちらの指標も使用される。
+
+.. Phase margin is defined as 180 degrees plus the value for the phase for the open-transfer function in degrees when the magnitude is unity. Typically, designers will keep the phase margin for a system above 60 degrees. As with other feedback systems, other measures of stability are possible, such as gain margin. Both measures are also used in feedback systems crated with op-amps[8].
+
+PLLのタイムドメインでの安定性は、閉ループPLLの位相のステップ応答から推測することができる。ダンピングが発生している2次の閉ループ系では、小さなオーバーシュートが存在している。このように、システムの不安定性は、位相ドメインでの過度なリンギングとオーバーシュートからもたらされる。
+
+.. PLL stability can be inferred in the time domain from the phase step response of a closed-loop PLL. For a second-order loop with critical damping, a small overshoot will exist. Instability will be indicated by excessive riging and overshoot when the phase step is applied.
+
+PLLの不安定性は、位相の振動となって現れる。つまり、瞬時の周波数の振動となって現れる。もし、固定の入力周波数を持った信号を与えることができたとしても、出力周波数は、継続的に変動してしまう。
+
+.. PLL instability can exhibit itself through oscillation of the phase. This appears to be an oscillation of the instantaneous frequency. If fixed input frequency is applied, the output frequency will vary continously.
+
 Loop Bandwidth, Peaking, and Tracking Behavior
 ------------------------------------------------------------------------------------
+
+PLLの入力信号は、通常、周期的な信号である。もし、PLLの入力信号に周波数の変動があった場合、位相の差が0となるように、PLLは入力信号に追従する。この特性のおかげで、PLLはFM信号の復調器として使用することができる。直前の節で見たように、PLLのバンド幅は、周波数ドメインの解析から求まる。
+
+.. The input to the PLL is typically a periodic signal. If the input to the PLL is a signal that varies in freqency, the PLL will attempt to track the signal at zero phase. It is this tracking property that makes PLLs useful for demodulating FM signals. The bandwidth of the PLL can be determined, as shown in the last section, using a frequency-domain analysis.
+
+入力信号の位相から見た場合のPLLの伝達特性は、ローパスフィルタとなる。そのため、ピーキング特性が含まれている場合がある。図4に3次のPLLの周波数特性を示す。この図から分かる通り、20kHz付近に3dB程度のピーキングが存在している。PLLをカスケードにした場合、このような過度なピーキングが(減衰型のループだとしても)問題を引き起こす場合がある。このピーク領域にノイズ信号が入ってくると、そのノイズは増幅されてしまう。この例のように、ピーキングの効果を確認するために、位相ドメインと時間ドメインのシミュレーションが使用される。
+
+.. While the input phase transfer function for the PLL is low pass in nature, there is no guarantee that it does not contain peaking. Figure 4 illustrates the response for a thied-order PLL. The response peaks in the 20kHz region at less than 3dB. Excessive peaking (an under-damped loop) can cause problems when PLLs are cascaded. The area of peaking represents gain, so any noise in this region is amplified. In this case, both phase-domain and time-domain simulation can be used to study the effects of peaking.
+
+.. figure:: ./img/ch6_fig4.png
+  :alt: Figure4: PLL Transfer Function from Input to Output
+
+ループの追従性は、バンド幅に関連している。ループの帯域幅は有限であるため、急速で瞬時の周波数の変化には、追従することができない。急な入力信号の変化が起こると、瞬時にロックが外れ、補足のプロセスが始まる。この問題も位相と時間ドメインのシミュレーションを行うことで、解析することができる。
+
+.. The tracking behavior of the loop is related to the bandwidth. Since the bandwidth of the loop is finite, the loop cannot track signals that have rapid or sharp frequency transitions. For sudden input frequency changes, the loop can mementarily lose lock then begin an acquisition process. These problems can be studied in both that phase and time domains through simulation.
 
 Lock Time
 ------------------------------------------------------------------------------------
