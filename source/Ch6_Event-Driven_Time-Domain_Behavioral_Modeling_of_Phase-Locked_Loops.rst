@@ -166,38 +166,52 @@ PLL Stability
 
 .. Phase margin is defined as 180 degrees plus the value for the phase for the open-transfer function in degrees when the magnitude is unity. Typically, designers will keep the phase margin for a system above 60 degrees. As with other feedback systems, other measures of stability are possible, such as gain margin. Both measures are also used in feedback systems crated with op-amps[8].
 
-PLLのタイムドメインでの安定性は、閉ループPLLの位相のステップ応答から推測することができる。ダンピングが発生している2次の閉ループ系では、小さなオーバーシュートが存在している。このように、システムの不安定性は、位相ドメインでの過度なリンギングとオーバーシュートからもたらされる。
+* PLLのタイムドメインでの安定性は、閉ループPLLの位相のステップ応答から推測することができる。ダンピングが発生している2次の閉ループ系では、小さなオーバーシュートが存在している。このように、システムの不安定性は、位相ドメインでの過度なリンギングとオーバーシュートからもたらされる。
 
 .. PLL stability can be inferred in the time domain from the phase step response of a closed-loop PLL. For a second-order loop with critical damping, a small overshoot will exist. Instability will be indicated by excessive riging and overshoot when the phase step is applied.
 
-PLLの不安定性は、位相の振動となって現れる。つまり、瞬時の周波数の振動となって現れる。もし、固定の入力周波数を持った信号を与えることができたとしても、出力周波数は、継続的に変動してしまう。
+* PLLの不安定性は、位相の振動となって現れる。つまり、瞬時の周波数の振動となって現れる。もし、固定の入力周波数を持った信号を与えることができたとしても、出力周波数は、継続的に変動してしまう。
 
 .. PLL instability can exhibit itself through oscillation of the phase. This appears to be an oscillation of the instantaneous frequency. If fixed input frequency is applied, the output frequency will vary continously.
 
 Loop Bandwidth, Peaking, and Tracking Behavior
 ------------------------------------------------------------------------------------
 
-PLLの入力信号は、通常、周期的な信号である。もし、PLLの入力信号に周波数の変動があった場合、位相の差が0となるように、PLLは入力信号に追従する。この特性のおかげで、PLLはFM信号の復調器として使用することができる。直前の節で見たように、PLLのバンド幅は、周波数ドメインの解析から求まる。
+* PLLの入力信号は、通常、周期的な信号である。もし、PLLの入力信号に周波数の変動があった場合、位相の差が0となるように、PLLは入力信号に追従する。この特性のおかげで、PLLはFM信号の復調器として使用することができる。直前の節で見たように、PLLのバンド幅は、周波数ドメインの解析から求まる。
 
 .. The input to the PLL is typically a periodic signal. If the input to the PLL is a signal that varies in freqency, the PLL will attempt to track the signal at zero phase. It is this tracking property that makes PLLs useful for demodulating FM signals. The bandwidth of the PLL can be determined, as shown in the last section, using a frequency-domain analysis.
 
-入力信号の位相から見た場合のPLLの伝達特性は、ローパスフィルタとなる。そのため、ピーキング特性が含まれている場合がある。図4に3次のPLLの周波数特性を示す。この図から分かる通り、20kHz付近に3dB程度のピーキングが存在している。PLLをカスケードにした場合、このような過度なピーキングが(減衰型のループだとしても)問題を引き起こす場合がある。このピーク領域にノイズ信号が入ってくると、そのノイズは増幅されてしまう。この例のように、ピーキングの効果を確認するために、位相ドメインと時間ドメインのシミュレーションが使用される。
+* 入力信号の位相から見た場合のPLLの伝達特性は、ローパスフィルタとなる。そのため、ピーキング特性が含まれている場合がある。図4に3次のPLLの周波数特性を示す。この図から分かる通り、20kHz付近に3dB程度のピーキングが存在している。PLLをカスケードにした場合、このような過度なピーキングが(減衰型のループだとしても)問題を引き起こす場合がある。このピーク領域にノイズ信号が入ってくると、そのノイズは増幅されてしまう。この例のように、ピーキングの効果を確認するために、位相ドメインと時間ドメインのシミュレーションが使用される。
 
 .. While the input phase transfer function for the PLL is low pass in nature, there is no guarantee that it does not contain peaking. Figure 4 illustrates the response for a thied-order PLL. The response peaks in the 20kHz region at less than 3dB. Excessive peaking (an under-damped loop) can cause problems when PLLs are cascaded. The area of peaking represents gain, so any noise in this region is amplified. In this case, both phase-domain and time-domain simulation can be used to study the effects of peaking.
 
 .. figure:: ./img/ch6_fig4.png
   :alt: Figure4: PLL Transfer Function from Input to Output
 
-ループの追従性は、バンド幅に関連している。ループの帯域幅は有限であるため、急速で瞬時の周波数の変化には、追従することができない。急な入力信号の変化が起こると、瞬時にロックが外れ、補足のプロセスが始まる。この問題も位相と時間ドメインのシミュレーションを行うことで、解析することができる。
+* ループの追従性は、バンド幅に関連している。ループの帯域幅は有限であるため、急速で瞬時の周波数の変化には、追従することができない。急な入力信号の変化が起こると、瞬時にロックが外れ、補足のプロセスが始まる。この問題も位相と時間ドメインのシミュレーションを行うことで、解析することができる。
 
 .. The tracking behavior of the loop is related to the bandwidth. Since the bandwidth of the loop is finite, the loop cannot track signals that have rapid or sharp frequency transitions. For sudden input frequency changes, the loop can mementarily lose lock then begin an acquisition process. These problems can be studied in both that phase and time domains through simulation.
 
 Lock Time
 ------------------------------------------------------------------------------------
 
+* PLLのロック時間は、入力周波数に追従し、特定の位相誤差範囲内まで落ち着くまでの時間である。PLLのロック過程を図5に示す。このように、ロック過程はスムーズにいかない。このギザギザは、ループフィルタに注入されるチャージポンプの電流によるものである。
+
+.. The lock time of a PLL is the time needed for a PLL to acquire the input frequency and then settle to less than a specified phase error. The tail end of a PLL lock transient is shown in Figure5. Note that is is not a smooth transient. The jaggedness is caused by the updates of the charge-pump applied to the loop filter.
+
+.. figure:: ./img/ch6_fig5.png
+  :alt: Figure5: A PLL Lock Transient from Simulation
+
+* この特性は、周波数シンセサイザやクロック生成回路には、非常に重要なものである。高周波では、PLLやクロック網で多くの電力を消費してしまう。電力マネージメントの方法によっては、電力の消費をセーブするために、PLLをシャットダウンする方法がメジャーになりつつある。このような用途では、PLLが使用される前に安定化する必要があるため、ロック時間を最小化する必要がある。固定バンド幅のPLLのロック時間は、ループの帯域に関係している。クロック生成用途では、ループの安定性のために、低いバンド幅が要求される。しかしながら、低帯域のPLLの場合、追従のための動きが遅くなり、ロック時間が長くなってしまう。そのため、可変のバンド幅を持ったPLLが提案されている。この問題は、通常、時間ドメインのシミュレーションで解析される。そのため、PLLのシミュレーションを高速化するために、ビヘイビアモデルによる解析が重要となる。
+
+.. This metric is important for frequency synthesizers and clock generation applications. At high frequencies, PLLs and clock networks can consume quite a bit of power. In different power management schemes, it has become popular to shut down the PLL to save power. The lock time indicates the minimum time needed for the clock to become stable before it can be used. The lock time in fixed-bandwidth PLLs is related to the bandwidth of the loop. For clock generation, low PLL bandwidths are often needed to keep the loop stable. However the low PLL bandwidth means a slow tracking behavior and a long lock time. Variable bandwidth PLLs have been proposed to address this problem. These issues are typically studied using time-domain simulation. Behavioral modeling is important to allow rapid simulaiton of many PLL cycles.
+
 Static Phase Error
 ------------------------------------------------------------------------------------
 
+* PLLは、ゼロ遅延のクロックバッファのようなアプリケーションにも用いられる。PLLドライバの位相誤差はゼロなので、入力と出力信号の遅延もほぼゼロとなる。この特性は、通常、回路シミュレーションを用いて、回路レベルで解析される。
+
+.. PLLs can be used in clocking applications as zero-delay clock buffers. The delay between the input and output appears to be nearly zero because the PLL drivers the phase error to zero. This metric is typically studied at the circuit level using circuit simulation.
 
 Jitter
 ===========
