@@ -216,7 +216,18 @@ Static Phase Error
 Jitter
 ===========
 
+* サイクルジッタは、周期ジッタと異なり、隣接間の周期の差を計測したものである。図6の例だと、最大サイクルジッタは|1.2-0.8|=0.4となり、最小サイクルジッタは|1.0-1.2|=0.2となる。このジッタは、ロジック回路のクリティカルパスの最小値に影響を与えることになるため、プロセッサシステムにおいて重要な指標となる[9]。いくつかのクロックパルスを与えた場合に、通常、最長の周期と最小の周期が近くなることはないため、サイクルジッタは、周期ジッタよりも楽観的なものとなる。
+
+.. Cycle-to-cycle jitter is the difference in the period measurement between adjacent cycles. For the example of Figure 6, the maximum cycle-to-cycle jitteris |1.2-0.8| = 0.4 and the minimum is |1.0-1.2| = 0.2. This value is critical in processor systems as it helps determine the minimum expected period for critical paths in the logic[9]. The cycle-to-cycle jitter value is less pessimistic than period jitter. It is not typically the case that the longest and shortest periods are near each other, which is the number that period jitter gives.
+
+While jitter is typically characterized by single numbers, the spread of jitter is often important. It can be seen by plotting a distribution of the period or cycle variation. In systems with multiple clocks, the distribution can be bimodal or trimodal. This in turn gives clues about the dominant noise sources. There may be a frequency dependency of the noise, which is best expressed by examining the phase noise rather than jitter.
+
+.. figure:: ./img/ch6_fig6.png
+  :alt: Figure6: Illustration of Jitter Types
+
+The cause of cycle-to-cycle jitter in real systems tends to be dominated by localized di/dt noise from circuits that cause modulation of the clock distribution tree. Behavioral modeling of this type of noise might be achieved outside of the PLL using a period modulation approach.
 
 Summary
 ------------
 
+In this section, various PLL metrics were discussed and defined, These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in Ihe time domain.
