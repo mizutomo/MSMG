@@ -227,9 +227,13 @@ Jitter
 .. figure:: ./img/ch6_fig6.png
   :alt: Figure6: Illustration of Jitter Types
 
-The cause of cycle-to-cycle jitter in real systems tends to be dominated by localized di/dt noise from circuits that cause modulation of the clock distribution tree. Behavioral modeling of this type of noise might be achieved outside of the PLL using a period modulation approach.
+* 現実のシステムにおけるサイクルジッタは、クロックツリーで発生するdi/dtノイズが原因である。このようなタイプのノイズをビヘイビアモデルで実現するためには、周期変調のアプローチ(Spectre-RF?)を利用して、PLLの外側の回路を含める必要がある。
+
+.. The cause of cycle-to-cycle jitter in real systems tends to be dominated by localized di/dt noise from circuits that cause modulation of the clock distribution tree. Behavioral modeling of this type of noise might be achieved outside of the PLL using a period modulation approach.
 
 Summary
 ------------
 
-In this section, various PLL metrics were discussed and defined, These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in Ihe time domain.
+* このセクションでは、様々なPLLの測定指標について議論と定義を行った。
+
+.. In this section, various PLL metrics were discussed and defined, These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in Ihe time domain.
