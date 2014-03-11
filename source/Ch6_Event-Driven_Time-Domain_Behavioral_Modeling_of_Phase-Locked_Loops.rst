@@ -220,7 +220,9 @@ Jitter
 
 .. Cycle-to-cycle jitter is the difference in the period measurement between adjacent cycles. For the example of Figure 6, the maximum cycle-to-cycle jitteris |1.2-0.8| = 0.4 and the minimum is |1.0-1.2| = 0.2. This value is critical in processor systems as it helps determine the minimum expected period for critical paths in the logic[9]. The cycle-to-cycle jitter value is less pessimistic than period jitter. It is not typically the case that the longest and shortest periods are near each other, which is the number that period jitter gives.
 
-While jitter is typically characterized by single numbers, the spread of jitter is often important. It can be seen by plotting a distribution of the period or cycle variation. In systems with multiple clocks, the distribution can be bimodal or trimodal. This in turn gives clues about the dominant noise sources. There may be a frequency dependency of the noise, which is best expressed by examining the phase noise rather than jitter.
+* ジッタは時間的に隣接した周期との差で特徴づけられるが、ジッタのスペクトラムも重要になることがある。このジッタスペクトラムは、周期やサイクルの変動の分布をプロットすることで得ることができる。複数のクロック系統が存在する場合、その分布は2重にも3重にもなる。このことはまた、支配的なノイズ源をクリアにするヒントを与えることがある。ノイズ源は、周波数依存性を持つことがある。この場合、ジッタよりも位相雑音で検証した方が良い場合がある。
+
+.. While jitter is typically characterized by single numbers, the spread of jitter is often important. It can be seen by plotting a distribution of the period or cycle variation. In systems with multiple clocks, the distribution can be bimodal or trimodal. This in turn gives clues about the dominant noise sources. There may be a frequency dependency of the noise, which is best expressed by examining the phase noise rather than jitter.
 
 .. figure:: ./img/ch6_fig6.png
   :alt: Figure6: Illustration of Jitter Types
