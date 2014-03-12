@@ -216,6 +216,9 @@ Static Phase Error
 Jitter
 ===========
 
+* 時間領域での主要なジッタは、図6に示すように、周期ジッタ、サイクルジッタ、ロングタームジッタである。周期ジッタとロングタームジッタは、あるエッジから測定されたものである。周期ジッタは、規準のエッジから次のエッジが現れるまでの不確かさを表したものである。これらの値は、RMS(Root Means Square)値か、ピーク値として測定される。ロングタームジッタは、Nサイクル後に測定される、という点以外は周期ジッタと同じである。Nサイクル後のロングタームジッタは、周期ジッタよりもsqrt(N)倍だけ大きくなる。
+
+.. The main types of jitter for time-domain analysis are period jitter, cycle-to-cycle jitter, and long term jitter as shown in Figure 6. Period jitter and long-term jitter are measured from a reference edge. Period jitter is the edge uncertainty from the reference edge to the next edge. It can be measured as an RMS or peak-to-peak value. Long-term jitter is similar to period jitter, except it is measured after N cycles. Long-term jitter is larger than period jitter for N cycles would be sqrt(N) times larger.
 
 Summary
 ------------
