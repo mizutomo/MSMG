@@ -220,6 +220,24 @@ Jitter
 
 .. The main types of jitter for time-domain analysis are period jitter, cycle-to-cycle jitter, and long term jitter as shown in Figure 6. Period jitter and long-term jitter are measured from a reference edge. Period jitter is the edge uncertainty from the reference edge to the next edge. It can be measured as an RMS or peak-to-peak value. Long-term jitter is similar to period jitter, except it is measured after N cycles. Long-term jitter is larger than period jitter for N cycles would be sqrt(N) times larger.
 
+* サイクルジッタは、周期ジッタと異なり、隣接間の周期の差を計測したものである。図6の例だと、最大サイクルジッタは|1.2-0.8|=0.4となり、最小サイクルジッタは|1.0-1.2|=0.2となる。このジッタは、ロジック回路のクリティカルパスの最小値に影響を与えることになるため、プロセッサシステムにおいて重要な指標となる[9]。いくつかのクロックパルスを与えた場合に、通常、最長の周期と最小の周期が近くなることはないため、サイクルジッタは、周期ジッタよりも楽観的なものとなる。
+
+.. Cycle-to-cycle jitter is the difference in the period measurement between adjacent cycles. For the example of Figure 6, the maximum cycle-to-cycle jitteris |1.2-0.8| = 0.4 and the minimum is |1.0-1.2| = 0.2. This value is critical in processor systems as it helps determine the minimum expected period for critical paths in the logic[9]. The cycle-to-cycle jitter value is less pessimistic than period jitter. It is not typically the case that the longest and shortest periods are near each other, which is the number that period jitter gives.
+
+* ジッタは時間的に隣接した周期との差で特徴づけられるが、ジッタのスペクトラムも重要になることがある。このジッタスペクトラムは、周期やサイクルの変動の分布をプロットすることで得ることができる。複数のクロック系統が存在する場合、その分布は2重にも3重にもなる。このことはまた、支配的なノイズ源をクリアにするヒントを与えることがある。ノイズ源は、周波数依存性を持つことがある。この場合、ジッタよりも位相雑音で検証した方が良い場合がある。
+
+.. While jitter is typically characterized by single numbers, the spread of jitter is often important. It can be seen by plotting a distribution of the period or cycle variation. In systems with multiple clocks, the distribution can be bimodal or trimodal. This in turn gives clues about the dominant noise sources. There may be a frequency dependency of the noise, which is best expressed by examining the phase noise rather than jitter.
+
+.. figure:: ./img/ch6_fig6.png
+  :alt: Figure6: Illustration of Jitter Types
+
+* 現実のシステムにおけるサイクルジッタは、クロックツリーで発生するdi/dtノイズが原因である。このようなタイプのノイズをビヘイビアモデルで実現するためには、周期変調のアプローチ(Spectre-RF?)を利用して、PLLの外側の回路を含める必要がある。
+
+.. The cause of cycle-to-cycle jitter in real systems tends to be dominated by localized di/dt noise from circuits that cause modulation of the clock distribution tree. Behavioral modeling of this type of noise might be achieved outside of the PLL using a period modulation approach.
+
 Summary
 ------------
 
+* このセクションでは、様々なPLLの測定指標について議論と定義を行った。
+
+.. In this section, various PLL metrics were discussed and defined, These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in Ihe time domain.
