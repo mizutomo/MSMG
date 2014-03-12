@@ -238,6 +238,6 @@ Jitter
 Summary
 ------------
 
-* このセクションでは、様々なPLLの測定指標について議論と定義を行った。
+* このセクションでは、様々なPLLの測定指標について議論と定義を行った。これらの測定指標は、設計者自身が関心の高いものであり、設定可能なパラメータの範囲内でモデルの質を向上させるために必要なものである。ノイズやジッタは、PLLの性能を測定する際の最重要パラメータである。次のセクションでは、タイムドメインで記述されたPLLのVerilog-AMSモデルについて説明する。
 
-.. In this section, various PLL metrics were discussed and defined, These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in Ihe time domain.
+.. In this section, various PLL metrics were discussed and defined. These are quantities that designers are interested in and will write models in order to quantify a given parameter for the design. Noise or jitter performance of a PLL is often the most important performance parameter. In the next section, Verilog-AMS models are presented for modeling PLLs in the time domain.
